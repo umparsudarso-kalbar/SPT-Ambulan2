@@ -3,734 +3,332 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#136f63">
+  <meta name="theme-color" content="#0f6f68">
   <title>SPT Ambulan RSDS</title>
   <style>
     :root{
-      --primary:#136f63;
-      --primary-dark:#0d514a;
-      --primary-soft:#e3f3ef;
-      --surface:#ffffff;
-      --surface-2:#f6f9f9;
-      --bg:#eef4f3;
-      --text:#153432;
-      --muted:#6c807e;
-      --line:#dce8e5;
-      --danger:#b53f32;
-      --warning:#98641e;
-      --success:#247a57;
-      --shadow:0 8px 30px rgba(17,72,66,.10);
-      --radius:20px;
+      --bg:#f3f7f7;--card:#fff;--ink:#17343a;--muted:#6a7f83;--line:#dce8e7;
+      --brand:#0f756c;--brand2:#164758;--soft:#e8f4f1;--danger:#a23d31;--warn:#875a21;
+      --shadow:0 8px 28px rgba(19,62,67,.07)
     }
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-    body{padding-bottom:92px}
+    html{font-size:16px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
     button,input,select,textarea{font:inherit}
-    button{touch-action:manipulation}
-    [hidden]{display:none!important}
-
-    .appbar{
-      position:sticky;top:0;z-index:60;
-      padding:max(12px,env(safe-area-inset-top)) 16px 12px;
-      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
-      color:white;box-shadow:0 3px 16px rgba(0,0,0,.14)
+    button,a{touch-action:manipulation}
+    header{background:linear-gradient(120deg,var(--brand2),var(--brand));color:#fff;padding:22px max(16px,calc((100vw - 1120px)/2))}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:18px}
+    h1{font-size:clamp(21px,3vw,29px);margin:0 0 5px}.head p{margin:0;color:#d4ece8;font-size:13px}.hospital{border:1px solid #ffffff42;border-radius:999px;padding:8px 12px;font-size:12px}
+    main{max-width:1120px;margin:auto;padding:18px 16px 56px}
+    .tabs{display:flex;gap:6px;background:#dfebe8;padding:5px;border-radius:13px;width:max-content;max-width:100%;margin-bottom:18px}
+    .tabs button{border:0;background:transparent;border-radius:9px;padding:10px 18px;font-weight:800;color:#476963;cursor:pointer}
+    .tabs button[aria-selected="true"]{background:#fff;color:var(--brand);box-shadow:0 2px 7px #25494112}
+    .intro{margin-bottom:16px}.intro h2{font-size:21px;margin:0 0 5px}.hint,.muted{color:var(--muted);font-size:12px;line-height:1.55}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:var(--shadow);margin-bottom:15px}
+    .card h3{margin:0;font-size:16px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}
+    .step{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;background:var(--soft);color:var(--brand);font-size:12px;margin-right:8px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}
+    label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}
+    input,select,textarea{width:100%;border:1px solid #d2e0df;background:#fff;color:var(--ink);padding:11px 12px;border-radius:10px;min-height:44px}
+    textarea{min-height:86px;resize:vertical}input:focus,select:focus,textarea:focus{outline:3px solid #15998918;border-color:#47a79b}
+    button,.button{border:0;border-radius:10px;padding:11px 14px;font-weight:800;font-size:13px;cursor:pointer;background:#e8f0ef;color:#315f5a;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    button:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--brand);color:#fff}.danger{background:#fff0ed;color:var(--danger)}
+    .small{padding:8px 10px;font-size:12px}.info{padding:11px 12px;border-radius:10px;background:#f1f7f5;color:#456b64;font-size:12px;line-height:1.6}
+    .person{position:relative;border:1px solid #e0e9e7;border-radius:12px;padding:13px;margin-top:11px}.person-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:11px}
+    .person-meta{font-size:12px;line-height:1.6;background:#f7f9f9;border-radius:9px;padding:10px;margin:9px 0;overflow-wrap:anywhere}
+    .auto{position:relative}.auto:focus-within{z-index:20}.suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 12px 30px #153d4425;max-height:250px;overflow:auto;z-index:30}
+    .suggestions button{width:100%;display:block;text-align:left;background:#fff;border-radius:0;border-bottom:1px solid #edf3f1;font-weight:400}.suggestions strong{display:block;margin-bottom:3px}
+    .summary{position:sticky;top:14px}.money-line{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}.money-line strong{white-space:nowrap}
+    .total{border-top:2px solid #d6e4e1;margin-top:10px;padding-top:13px}.total strong{display:block;font-size:25px;color:var(--brand);margin-top:4px}.summary .primary{width:100%;margin-top:14px}
+    .notice{padding:11px 13px;border-radius:10px;background:#fff2df;color:var(--warn);margin-bottom:14px;line-height:1.55;font-size:13px}.notice.error{background:#fff0ed;color:var(--danger)}.notice.success{background:#e8f6ed;color:#286848}
+    [hidden]{display:none!important}.result-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.badge{font-size:11px;border-radius:999px;padding:5px 8px;background:#e8f4ee;color:#2d7257}
+    .report-destination{font-size:20px;font-weight:900;margin:4px 0 14px}.trip-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}.trip-meta>div{background:#f4f8f7;border-radius:10px;padding:10px}.trip-meta span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase}.trip-meta strong{display:block;margin-top:4px;font-size:13px}
+    .table-wrap{overflow:auto;margin:13px -4px}table{width:100%;border-collapse:collapse;font-size:12px;min-width:520px}th{background:#f1f7f5;color:#54766c;text-align:left;font-size:11px;padding:10px}td{padding:11px 10px;border-bottom:1px solid #e7efed;vertical-align:top}.amount{white-space:nowrap;text-align:right}
+    .report-label{margin-top:18px;font-size:11px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    details{border:1px solid var(--line);border-radius:12px;background:#fff;margin:10px 0;overflow:hidden}summary{cursor:pointer;padding:14px;font-size:13px;font-weight:800}.details-body{padding:0 14px 14px}
+    .share-card{margin-top:14px;border:1px dashed #bfd4d0;background:#f8fbfa;border-radius:14px;padding:14px}
+    .share-title{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#557672;margin-bottom:8px}
+    .share-text{white-space:pre-wrap;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#213b40;user-select:text;cursor:pointer;padding:12px;background:#fff;border-radius:10px;border:1px solid #e0e9e7}
+    .share-tip{font-size:11px;color:var(--muted);margin-top:7px}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#173b40;color:#fff;padding:10px 14px;border-radius:999px;font-size:12px;box-shadow:0 8px 24px #0002;z-index:99}
+    @media(max-width:860px){.layout{grid-template-columns:1fr}.summary{position:static}.summary .card{margin-bottom:15px}}
+    @media(max-width:600px){
+      header{padding:18px 15px}.hospital{display:none}main{padding:13px 11px 42px}.tabs{width:100%}.tabs button{flex:1;padding:10px 8px}
+      .card{padding:14px;border-radius:14px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.section-head{align-items:flex-start}.section-head button{flex:none}
+      .trip-meta{grid-template-columns:1fr 1fr}.trip-meta>div:last-child{grid-column:1/-1}.report-destination{font-size:18px}.total strong{font-size:23px}
+      .actions .button,.actions button{width:100%}.share-text{font-size:12px}.intro h2{font-size:19px}
     }
-    .appbar-inner{max-width:920px;margin:auto;display:flex;align-items:center;gap:13px}
-    .app-icon{
-      width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
-      background:rgba(255,255,255,.14);font-size:23px;flex:none
-    }
-    .app-title{min-width:0;flex:1}
-    .app-title h1{font-size:18px;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .app-title p{font-size:11px;margin:0;color:#d2ebe7}
-    .status-dot{width:10px;height:10px;border-radius:50%;background:#9fe6bb;box-shadow:0 0 0 4px rgba(159,230,187,.15)}
-
-    .shell{max-width:920px;margin:auto;padding:16px}
-    .hero{
-      border-radius:24px;padding:20px;background:linear-gradient(150deg,#ffffff,#f3faf8);
-      border:1px solid var(--line);box-shadow:var(--shadow);margin-bottom:15px
-    }
-    .hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--primary);text-transform:uppercase}
-    .hero h2{font-size:24px;line-height:1.15;margin:7px 0 8px}
-    .hero p{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
-
-    .notice{padding:12px 14px;border-radius:14px;background:#fff4df;color:#835819;font-size:13px;line-height:1.5;margin-bottom:14px;border:1px solid #f1dfb8}
-    .notice.error{background:#fff0ed;color:#9f372d;border-color:#f0c9c2}
-    .notice.success{background:#eaf7ef;color:#256f4d;border-color:#c9e7d5}
-
-    .section{
-      background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-      padding:17px;margin-bottom:14px;box-shadow:0 4px 18px rgba(26,72,69,.055)
-    }
-    .section-head{display:flex;align-items:center;gap:12px;margin-bottom:15px}
-    .step{
-      width:36px;height:36px;display:grid;place-items:center;border-radius:12px;
-      background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:900;flex:none
-    }
-    .section-head h3{font-size:16px;margin:0}
-    .section-head p{font-size:11px;color:var(--muted);margin:3px 0 0}
-    .section-action{margin-left:auto}
-
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .full{grid-column:1/-1}
-    label{display:block;font-size:12px;font-weight:800;margin-bottom:6px;color:#36514e}
-    input,select,textarea{
-      width:100%;min-height:48px;border:1px solid #d2e2df;border-radius:14px;background:#fbfdfd;
-      padding:12px 13px;color:var(--text);font-size:14px;outline:none
-    }
-    textarea{min-height:90px;resize:vertical}
-    input:focus,select:focus,textarea:focus{border-color:#58a99e;box-shadow:0 0 0 4px rgba(19,111,99,.08);background:white}
-    fieldset{border:0;padding:0;margin:0;min-width:0}
-    fieldset:disabled{opacity:.68}
-
-    .info-chip{
-      min-height:48px;border-radius:14px;background:var(--surface-2);border:1px dashed #cddfdc;
-      padding:11px 12px;color:#4f6a67;font-size:12px;line-height:1.5
-    }
-
-    .btn{
-      border:0;border-radius:14px;min-height:44px;padding:10px 14px;font-weight:800;font-size:13px;
-      cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none
-    }
-    .btn-primary{background:var(--primary);color:#fff;box-shadow:0 5px 14px rgba(19,111,99,.18)}
-    .btn-soft{background:var(--primary-soft);color:var(--primary)}
-    .btn-neutral{background:#edf3f2;color:#355f5a}
-    .btn-danger{background:#fff0ed;color:var(--danger)}
-    .btn:disabled{opacity:.45;cursor:not-allowed}
-
-    .person{
-      margin-top:11px;border:1px solid var(--line);background:#fcfefe;border-radius:16px;padding:13px
-    }
-    .person-top{display:flex;align-items:center;gap:8px;margin-bottom:11px}
-    .person-role{font-size:13px;font-weight:900;flex:1}
-    .person-meta{font-size:11px;line-height:1.55;color:#546f6b;background:#f4f8f7;border-radius:12px;padding:10px;margin:9px 0}
-    .auto{position:relative}
-    .suggestions{
-      position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:80;background:#fff;
-      border:1px solid var(--line);border-radius:15px;box-shadow:0 12px 34px rgba(16,60,55,.18);
-      overflow:auto;max-height:260px
-    }
-    .suggestions button{
-      width:100%;border:0;border-bottom:1px solid #edf2f1;background:#fff;padding:12px 13px;text-align:left;cursor:pointer
-    }
-    .suggestions button:last-child{border-bottom:0}
-    .suggestions strong{display:block;font-size:13px;color:#234541;margin-bottom:3px}
-    .suggestions span{font-size:11px;color:var(--muted)}
-
-    .summary-card{
-      background:linear-gradient(145deg,#133f3b,#166d63);color:white;border-radius:22px;padding:18px;
-      box-shadow:0 10px 24px rgba(14,79,71,.19);margin-bottom:14px
-    }
-    .summary-card h3{font-size:14px;margin:0 0 11px;color:#d9efeb}
-    .money-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:12px;border-bottom:1px solid rgba(255,255,255,.10)}
-    .money-row strong{white-space:nowrap}
-    .total-row{padding-top:14px;margin-top:7px}
-    .total-row span{display:block;color:#cde4df;font-size:10px;text-transform:uppercase;letter-spacing:.08em}
-    .total-row strong{font-size:27px;display:block;margin-top:4px}
-    .submit-wrap{display:grid;grid-template-columns:1fr auto;gap:9px;margin-top:14px}
-    .submit-wrap .btn-primary{min-height:50px}
-
-    .result-card{
-      background:white;border:1px solid var(--line);border-radius:22px;padding:17px;margin-bottom:14px;box-shadow:var(--shadow)
-    }
-    .result-head{display:flex;align-items:flex-start;gap:12px}
-    .result-head h3{font-size:17px;margin:0}.result-head .dest{font-size:12px;color:var(--muted);margin-top:4px}
-    .badge{margin-left:auto;background:#e9f6ef;color:#28714f;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900}
-    .meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
-    .meta-box{background:#f5f9f8;border-radius:13px;padding:10px}
-    .meta-box span{display:block;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-    .meta-box strong{display:block;font-size:12px;margin-top:4px}
-    .person-list{border-top:1px solid var(--line);margin-top:10px}
-    .person-line{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
-    .person-line strong{display:block;font-size:12px}.person-line small{color:var(--muted);font-size:10px}
-    .person-line .amt{font-size:12px;font-weight:900;white-space:nowrap}
-    .result-total{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding-top:14px}
-    .result-total span{font-size:10px;color:var(--muted);font-weight:800}.result-total strong{font-size:22px;color:var(--primary)}
-    .result-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}
-    .report-mini{margin-top:14px;border:1px dashed #c8dcd8;background:#f8fbfa;border-radius:16px;padding:13px}
-    .report-mini-title{font-size:10px;font-weight:900;text-transform:uppercase;color:#5c7773;letter-spacing:.07em;margin-bottom:7px}
-    .report-text{white-space:pre-wrap;font:12px/1.5 Consolas,monospace;background:#fff;padding:11px;border-radius:12px;border:1px solid #e3ecea;user-select:text}
-
-    .history-item{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
-    .history-item summary{list-style:none;padding:14px;cursor:pointer;display:flex;align-items:center;gap:10px}
-    .history-item summary::-webkit-details-marker{display:none}
-    .history-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--primary-soft);flex:none}
-    .history-copy{min-width:0;flex:1}.history-copy strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.history-copy span{font-size:10px;color:var(--muted)}
-    .history-body{padding:0 12px 12px}
-
-    .bottom-nav{
-      position:fixed;z-index:70;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);
-      border-top:1px solid #d9e6e3;box-shadow:0 -6px 25px rgba(25,65,62,.09);
-      padding:7px 12px calc(7px + env(safe-area-inset-bottom));
-    }
-    .bottom-inner{max-width:520px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .nav-btn{
-      border:0;background:transparent;color:#708481;border-radius:14px;padding:9px 8px;font-size:11px;font-weight:800;cursor:pointer
-    }
-    .nav-btn b{display:block;font-size:20px;line-height:1;margin-bottom:4px}
-    .nav-btn.active{background:var(--primary-soft);color:var(--primary)}
-
-    .loading-overlay{
-      position:fixed;inset:0;z-index:100;background:rgba(9,39,36,.38);display:grid;place-items:center;padding:20px
-    }
-    .loading-card{background:white;border-radius:20px;padding:20px;min-width:220px;text-align:center;box-shadow:var(--shadow)}
-    .spinner{width:34px;height:34px;border:4px solid #dbece9;border-top-color:var(--primary);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .loading-card strong{display:block;font-size:14px}.loading-card span{display:block;font-size:11px;color:var(--muted);margin-top:5px}
-
-    .toast{position:fixed;z-index:110;left:50%;bottom:96px;transform:translateX(-50%);background:#173c38;color:#fff;padding:10px 14px;border-radius:999px;font-size:11px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
-
-    @media(min-width:760px){
-      body{padding-bottom:30px}
-      .desktop-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
-      .desktop-side{position:sticky;top:88px}
-      .bottom-nav{position:sticky;bottom:auto;top:74px;max-width:920px;margin:0 auto 12px;border:0;background:transparent;box-shadow:none;padding:0 16px}
-      .bottom-inner{margin:0;width:max-content;grid-template-columns:150px 150px;gap:7px}
-      .nav-btn{background:#fff;border:1px solid var(--line);box-shadow:0 3px 14px rgba(25,65,62,.05)}
-      .nav-btn b{display:inline;font-size:14px;margin-right:7px}
-    }
-    @media(max-width:580px){
-      .shell{padding:12px 10px}
-      .hero{padding:17px;border-radius:20px}.hero h2{font-size:21px}
-      .section{padding:14px;border-radius:18px}
-      .grid{grid-template-columns:1fr}.full{grid-column:auto}
-      .meta-grid{grid-template-columns:1fr 1fr}.meta-box:last-child{grid-column:1/-1}
-      .result-actions{grid-template-columns:1fr}
-      .submit-wrap{grid-template-columns:1fr 84px}
-    }
+    @media(max-width:390px){main{padding-left:8px;padding-right:8px}.card{padding:12px}.trip-meta{grid-template-columns:1fr}.trip-meta>div:last-child{grid-column:auto}}
   </style>
 </head>
 <body>
-  <header class="appbar">
-    <div class="appbar-inner">
-      <div class="app-icon">🚑</div>
-      <div class="app-title">
-        <h1>SPT Ambulan RSDS</h1>
-        <p>RSUD dr. Soedarso · Full Google Apps Script</p>
-      </div>
-      <div class="status-dot" title="Aplikasi aktif"></div>
-    </div>
-  </header>
-
-  <nav class="bottom-nav">
-    <div class="bottom-inner">
-      <button class="nav-btn active" id="navInput" onclick="switchView('input')"><b>＋</b>Buat SPT</button>
-      <button class="nav-btn" id="navHistory" onclick="switchView('history')"><b>▤</b>Riwayat</button>
-    </div>
+<header><div class="head"><div><h1>🚑 SPT Ambulan RSDS</h1><p>SPT driver, rekap perjalanan & rincian transfer</p></div><div class="hospital">RSUD dr. Soedarso</div></div></header>
+<main>
+  <nav class="tabs">
+    <button id="inputTab" aria-selected="true" onclick="switchTab('input')">Buat SPT</button>
+    <button id="rekapTab" aria-selected="false" onclick="switchTab('rekap')">Rekap</button>
   </nav>
 
-  <main class="shell">
-    <section id="inputView">
-      <div class="hero">
-        <div class="eyebrow">Perjalanan Ambulan</div>
-        <h2>Buat SPT lebih cepat</h2>
-        <p>Pilih tujuan, kendaraan dan petugas. Sistem hanya membuat SPT untuk driver lalu otomatis menambahkan rekap perjalanan.</p>
-      </div>
+  <section id="inputPanel">
+    <div id="loadStatus" class="notice">Memuat data…</div>
+    <button id="reloadData" hidden onclick="loadData()">Muat ulang data</button>
 
-      <div id="loadStatus" class="notice">Memuat data aplikasi…</div>
-      <button id="reloadBtn" class="btn btn-neutral" hidden onclick="loadData()">Muat ulang</button>
-
-      <form id="tripForm">
-        <div class="desktop-layout">
-          <fieldset id="formFields" disabled>
-            <section class="section">
-              <div class="section-head">
-                <div class="step">01</div>
-                <div><h3>Perjalanan</h3><p>Tujuan, tanggal dan kendaraan</p></div>
-              </div>
-              <div class="grid">
-                <div class="full">
-                  <label for="tujuan">Tujuan pengantaran</label>
-                  <div class="auto">
-                    <input id="tujuan" autocomplete="off" required placeholder="Cari tujuan…">
-                    <div id="tujuanList" class="suggestions" hidden></div>
-                  </div>
-                </div>
-                <div>
-                  <label for="berangkat">Tanggal berangkat</label>
-                  <input id="berangkat" type="date" required>
-                </div>
-                <div>
-                  <label for="plat">Kendaraan</label>
-                  <select id="plat" required><option value="">Pilih kendaraan</option></select>
-                </div>
-                <div class="full"><div class="info-chip" id="travelInfo">Lama perjalanan akan mengikuti tujuan.</div></div>
-              </div>
-            </section>
-
-            <section class="section">
-              <div class="section-head">
-                <div class="step">02</div>
-                <div><h3>BBM</h3><p>Kebutuhan bahan bakar perjalanan</p></div>
-              </div>
-              <div class="grid">
-                <div>
-                  <label for="bbm">Jenis BBM</label>
-                  <select id="bbm" required><option value="">Pilih BBM</option></select>
-                </div>
-                <div><label>Perhitungan</label><div class="info-chip" id="fuelInfo">Pilih tujuan dan BBM.</div></div>
-              </div>
-            </section>
-
-            <section class="section">
-              <div class="section-head">
-                <div class="step">03</div>
-                <div><h3>Driver</h3><p>SPT dibuat hanya untuk driver</p></div>
-                <button type="button" class="btn btn-soft section-action" id="addDriver" onclick="addPerson('Driver 2')" disabled>+ Driver 2</button>
-              </div>
-              <div id="driverHint" class="info-chip">Driver kedua tersedia untuk perjalanan tepat 3 hari.</div>
-              <div id="drivers"></div>
-            </section>
-
-            <section class="section">
-              <div class="section-head">
-                <div class="step">04</div>
-                <div><h3>Perawat</h3><p>Opsional, maksimal 2 orang</p></div>
-                <button type="button" class="btn btn-soft section-action" id="addNurse">+ Perawat</button>
-              </div>
-              <div id="nurses"></div>
-            </section>
-
-            <section class="section">
-              <div class="section-head">
-                <div class="step">05</div>
-                <div><h3>Pasien / jenazah</h3><p>Informasi pengantaran</p></div>
-              </div>
-              <div class="grid">
-                <div>
-                  <label for="status">Status</label>
-                  <select id="status"><option>Pasien</option><option>Jenazah</option></select>
-                </div>
-                <div>
-                  <label for="pasien">Nama</label>
-                  <input id="pasien" required maxlength="200" placeholder="Nama lengkap">
-                </div>
-                <div class="full">
-                  <label for="alamat">Alamat</label>
-                  <textarea id="alamat" required maxlength="1000" placeholder="Alamat pasien / jenazah"></textarea>
-                </div>
-              </div>
-            </section>
-          </fieldset>
-
-          <aside class="desktop-side">
-            <section class="summary-card">
-              <h3>Ringkasan transfer</h3>
-              <div id="costRows"></div>
-              <div class="total-row">
-                <span>Total yang harus ditransfer</span>
-                <strong id="grandTotal">—</strong>
-              </div>
-              <div class="submit-wrap">
-                <button class="btn btn-primary" id="submitBtn" type="submit" disabled>Buat SPT</button>
-                <button class="btn btn-neutral" id="newBtn" type="button" disabled onclick="resetForm()">Baru</button>
-              </div>
-            </section>
-            <div id="processStatus" class="notice" hidden></div>
-          </aside>
-        </div>
-      </form>
-
-      <div id="resultArea" hidden></div>
-    </section>
-
-    <section id="historyView" hidden>
-      <div class="hero">
-        <div class="eyebrow">Riwayat</div>
-        <h2>Perjalanan terakhir</h2>
-        <p>Riwayat ini berasal dari data pemulihan aplikasi. Rekap utama tetap tersimpan di sheet Rekap-baru.</p>
-      </div>
-      <button class="btn btn-neutral" onclick="loadHistory()">↻ Muat ulang</button>
-      <div id="historyStatus" style="margin:12px 0" class="muted"></div>
-      <div id="historyList"></div>
-    </section>
-  </main>
-
-  <div id="loading" class="loading-overlay" hidden>
-    <div class="loading-card">
-      <div class="spinner"></div>
-      <strong id="loadingTitle">Memproses…</strong>
-      <span id="loadingText">Mohon tunggu sebentar</span>
+    <div class="intro">
+      <h2>Buat surat perjalanan</h2>
+      <div class="hint">Mekanisme sederhana: 1 SPT Google Docs per driver, tanpa membuat folder perjalanan dan tanpa membuat file PDF tambahan. Rekap tetap ditambahkan ke Rekap-baru.</div>
     </div>
-  </div>
-  <div id="toast" class="toast" hidden></div>
+
+    <form id="form">
+      <div class="layout">
+        <fieldset id="fields" disabled style="border:0;padding:0;margin:0;min-width:0">
+          <section class="card">
+            <div class="section-head"><h3><span class="step">01</span>Perjalanan & kendaraan</h3></div>
+            <div class="grid">
+              <div class="full"><label>Tujuan pengantaran</label><div class="auto"><input id="tujuan" required autocomplete="off" placeholder="Ketik nama tujuan…"><div id="tujuanList" class="suggestions" hidden></div></div></div>
+              <div><label>Tanggal berangkat</label><input id="berangkat" type="date" required></div>
+              <div><label>Kendaraan</label><select id="plat" required><option value="">Pilih plat mobil</option></select></div>
+              <div class="full info" id="travelInfo">Lama perjalanan dan tanggal kembali mengikuti tujuan.</div>
+              <div><label>Jenis BBM</label><select id="bbm" required><option value="">Pilih BBM</option></select></div>
+              <div><label>Kebutuhan BBM</label><div class="info" id="fuelInfo">Pilih tujuan dan jenis BBM.</div></div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><h3><span class="step">02</span>Pengemudi</h3><button type="button" class="small" id="addDriver" onclick="addPerson('Driver 2')" disabled>+ Driver kedua</button></div>
+            <div class="hint" id="driverHint">Driver kedua hanya tersedia untuk perjalanan tepat 3 hari.</div><div id="drivers"></div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><h3><span class="step">03</span>Perawat pendamping</h3><button type="button" class="small" id="addNurseBtn">+ Perawat</button></div>
+            <div class="hint">Opsional, maksimal 2 orang. Perawat tidak dibuatkan SPT.</div><div id="nurses"></div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><h3><span class="step">04</span>Pasien / jenazah</h3></div>
+            <div class="grid">
+              <div><label>Status pengantaran</label><select id="status"><option>Pasien</option><option>Jenazah</option></select></div>
+              <div><label>Nama pasien / jenazah</label><input id="pasien" required maxlength="200"></div>
+              <div class="full"><label>Alamat pasien / jenazah</label><textarea id="alamat" required maxlength="1000"></textarea></div>
+            </div>
+          </section>
+        </fieldset>
+
+        <aside class="summary">
+          <section class="card">
+            <h3>Rincian transfer</h3><div class="hint">BBM satu mobil + SPPD setiap petugas.</div>
+            <div id="costs"></div>
+            <div class="total"><span class="muted">TOTAL TRANSFER</span><strong id="total">—</strong></div>
+            <div class="hint" id="costNote">Pilih tujuan, BBM, dan petugas.</div>
+            <button id="submitBtn" class="primary" type="submit" disabled>Buat SPT</button>
+            <button id="newBtn" disabled type="button" class="small" style="width:100%;margin-top:8px" onclick="newTrip()">Formulir baru</button>
+          </section>
+          <div id="processStatus" class="notice" hidden></div>
+        </aside>
+      </div>
+    </form>
+    <div id="result" hidden></div>
+  </section>
+
+  <section id="rekapPanel" hidden>
+    <div class="section-head"><div><h2 style="font-size:20px;margin:0">Perjalanan terakhir</h2><div class="hint">Ringkasan perjalanan terakhir yang tersimpan.</div></div><button id="historyRefresh" onclick="loadHistory()">↻ Muat ulang</button></div>
+    <div id="historyStatus" class="hint"></div><div id="history"></div>
+  </section>
+</main>
+
+<iframe name="gasBridge" id="gasBridge" hidden></iframe>
+<form id="gasForm" method="post" target="gasBridge" hidden>
+  <input name="action" value="generateSPT">
+  <input name="payload" id="gasPayload">
+  <input name="token" id="gasToken">
+</form>
+<div id="toast" class="toast" hidden></div>
 
 <script>
 'use strict';
 
-let DATA={drivers:[],nurses:[],tujuan:[],bbm:[],plat:[]};
-let destination=null,slots=[],pending=null,busy=false,completed=false;
+/* WAJIB: ganti dengan URL deployment Web App GAS (/exec), bukan URL editor. */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbytPTdXyOsDGNh3coAXHz189fH0eJoYUkaDE-ytoSZsHfKVy3EVqvkPXwsT2JmDIrheDA/exec';
 
-const $=id=>document.getElementById(id);
-const money=n=>Number.isFinite(Number(n))
-  ? new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(n))
-  : '—';
+let DATA={drivers:[],nurses:[],tujuan:[],bbm:[],plat:[]}, destination=null, slots=[], pending=null, busy=false, completed=false, historyBusy=false;
+const el=id=>document.getElementById(id);
+const node=(tag,txt,cls)=>{const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n};
+const money=n=>Number.isFinite(n)?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n):'—';
 
-function toast(msg){
-  const t=$('toast');t.textContent=msg;t.hidden=false;
-  clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.hidden=true,1800);
-}
-function notice(id,msg,type){
-  const n=$(id);n.textContent=msg;n.className='notice'+(type?' '+type:'');n.hidden=!msg;
-}
-function loading(on,title,text){
-  $('loading').hidden=!on;
-  if(title)$('loadingTitle').textContent=title;
-  if(text)$('loadingText').textContent=text;
-}
-function node(tag,text,cls){
-  const n=document.createElement(tag);
-  if(text!==undefined)n.textContent=text;
-  if(cls)n.className=cls;
-  return n;
-}
-function gas(fn,...args){
+function toast(msg){const t=el('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.hidden=true,1800)}
+function showNotice(id,text,type){const n=el(id);n.textContent=text;n.className='notice'+(type?' '+type:'');n.hidden=!text}
+function apiReady(){return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec/.test(GAS_URL)}
+function switchTab(tab){const r=tab==='rekap';el('inputPanel').hidden=r;el('rekapPanel').hidden=!r;el('inputTab').setAttribute('aria-selected',String(!r));el('rekapTab').setAttribute('aria-selected',String(r));if(r&&!historyBusy)loadHistory()}
+
+function jsonp(action){
   return new Promise((resolve,reject)=>{
-    const runner=google.script.run
-      .withSuccessHandler(resolve)
-      .withFailureHandler(err=>reject(Error((err&&err.message)||String(err))));
-    runner[fn](...args);
+    if(!apiReady()) return reject(Error('Isi GAS_URL di index.html dengan URL deployment GAS /exec.'));
+    const cb='__sptcb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const s=document.createElement('script');
+    const timer=setTimeout(()=>done(Error('Server tidak merespons.')),30000);
+    function done(err,val){clearTimeout(timer);delete window[cb];s.remove();err?reject(err):resolve(val)}
+    window[cb]=res=>res&&res.ok?done(null,res.data):done(Error((res&&res.error)||'Gagal mengambil data.'));
+    s.onerror=()=>done(Error('Gagal terhubung ke server GAS.'));
+    s.src=GAS_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+    document.head.appendChild(s);
   });
 }
 
-function switchView(view){
-  const history=view==='history';
-  $('inputView').hidden=history;
-  $('historyView').hidden=!history;
-  $('navInput').classList.toggle('active',!history);
-  $('navHistory').classList.toggle('active',history);
-  if(history)loadHistory();
-  window.scrollTo({top:0,behavior:'smooth'});
+const postWaiters=new Map();
+window.addEventListener('message',e=>{
+  const d=e.data;if(!d||!d.token||!postWaiters.has(d.token))return;
+  const w=postWaiters.get(d.token);postWaiters.delete(d.token);clearTimeout(w.timer);
+  d.ok?w.resolve(d.data):w.reject(Error(d.error||'Gagal membuat SPT.'));
+});
+
+function postGenerate(payload){
+  return new Promise((resolve,reject)=>{
+    if(!apiReady()) return reject(Error('Isi GAS_URL di index.html dengan URL deployment GAS /exec.'));
+    const token='t_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const timer=setTimeout(()=>{postWaiters.delete(token);reject(Error('Proses terlalu lama. Coba lagi dengan data yang sama.'))},90000);
+    postWaiters.set(token,{resolve,reject,timer});
+    el('gasForm').action=GAS_URL;el('gasPayload').value=JSON.stringify(payload);el('gasToken').value=token;el('gasForm').submit();
+  });
 }
 
-function fillSelect(id,items,label,placeholder){
-  const s=$(id);s.innerHTML='';
-  const first=document.createElement('option');first.value='';first.textContent=placeholder;s.appendChild(first);
-  items.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=label(x);s.appendChild(o)});
-}
+function fillSelect(id,items,label,placeholder){const s=el(id);s.textContent='';const f=node('option',placeholder);f.value='';s.appendChild(f);items.forEach(x=>{const o=node('option',label(x));o.value=x.id;s.appendChild(o)})}
 
 async function loadData(){
-  $('reloadBtn').hidden=true;
-  notice('loadStatus','Memuat tujuan, petugas, kendaraan dan BBM…');
+  el('reloadData').hidden=true;showNotice('loadStatus','Memuat data tujuan, petugas, kendaraan, dan BBM…');
   try{
-    DATA=await gas('getAppData');
-    $('berangkat').value=DATA.today||'';
-    fillSelect('plat',DATA.plat,p=>p.plat+(p.mobil?' · '+p.mobil:''),'Pilih kendaraan');
+    DATA=await jsonp('getAppData');el('berangkat').value=DATA.today;
+    fillSelect('plat',DATA.plat,p=>p.plat+(p.mobil?' · '+p.mobil:''),'Pilih plat mobil');
     fillSelect('bbm',DATA.bbm,b=>b.jenis+' · '+money(b.harga)+'/liter','Pilih BBM');
-    $('formFields').disabled=false;$('submitBtn').disabled=false;$('newBtn').disabled=false;
-    notice('loadStatus','');
-    if(!slots.length)addPerson('Driver 1');
-    updateCosts();
-  }catch(e){
-    notice('loadStatus',e.message,'error');$('reloadBtn').hidden=false;
-  }
+    el('fields').disabled=false;el('submitBtn').disabled=false;el('newBtn').disabled=false;showNotice('loadStatus','');
+    if(!slots.length)addPerson('Driver 1');updateCosts();
+  }catch(e){showNotice('loadStatus',e.message,'error');el('reloadData').hidden=false}
 }
 
 function autocomplete(input,list,items,label,detail,onSelect,onClear){
   function show(){
-    const q=input.value.toLowerCase().trim();
-    list.innerHTML='';
-    const found=items().filter(x=>(label(x)+' '+detail(x)).toLowerCase().includes(q)).slice(0,30);
-    found.forEach(item=>{
-      const b=document.createElement('button');b.type='button';
-      b.append(node('strong',label(item)),node('span',detail(item)));
-      b.onclick=()=>{input.value=label(item);list.hidden=true;onSelect(item)};
-      list.appendChild(b);
-    });
-    if(!found.length){const d=node('div','Tidak ditemukan.','muted');d.style.padding='12px';list.appendChild(d)}
-    list.hidden=false;
+    const q=input.value.toLowerCase().trim();list.textContent='';
+    const found=items().filter(x=>(label(x)+' '+detail(x)).toLowerCase().includes(q)).slice(0,35);
+    found.forEach(item=>{const b=node('button');b.type='button';b.append(node('strong',label(item)),node('span',detail(item)));b.onclick=()=>{input.value=label(item);list.hidden=true;onSelect(item)};list.appendChild(b)});
+    if(!found.length)list.appendChild(node('div','Tidak ditemukan.','hint'));list.hidden=false
   }
-  input.addEventListener('focus',show);
-  input.addEventListener('input',()=>{onClear();show()});
+  input.addEventListener('input',()=>{onClear();show()});input.addEventListener('focus',show);
 }
-document.addEventListener('click',e=>{
-  document.querySelectorAll('.auto').forEach(a=>{
-    if(!a.contains(e.target)){const l=a.querySelector('.suggestions');if(l)l.hidden=true}
-  });
-});
-
-autocomplete(
-  $('tujuan'),$('tujuanList'),
-  ()=>DATA.tujuan,
-  x=>x.nama,
-  x=>x.lama+' hari · '+(x.liter==null?'Liter belum diisi':x.liter+' liter'),
-  x=>{destination=x;syncDestination()},
-  ()=>{destination=null;syncDestination()}
-);
+document.addEventListener('click',e=>document.querySelectorAll('.auto').forEach(a=>{if(!a.contains(e.target))a.querySelector('.suggestions').hidden=true}));
 
 function syncDestination(){
-  if(!destination || Number(destination.lama)!==3){
-    slots.filter(p=>p.role==='Driver 2').slice().forEach(p=>removePerson(p,false));
-  }
-  $('addDriver').disabled=!destination||Number(destination.lama)!==3||slots.some(p=>p.role==='Driver 2');
-  $('driverHint').textContent=destination&&Number(destination.lama)===3
-    ? 'Perjalanan 3 hari: driver kedua dapat ditambahkan.'
-    : 'Driver kedua tersedia untuk perjalanan tepat 3 hari.';
-  updateCosts();
+  if(!destination||destination.lama!==3)slots.filter(p=>p.role==='Driver 2').forEach(p=>removePerson(p,false));
+  el('addDriver').disabled=!destination||destination.lama!==3||slots.some(p=>p.role==='Driver 2');
+  el('driverHint').textContent=destination&&destination.lama===3?'Perjalanan 3 hari: boleh menambah 1 driver.':'Driver kedua hanya tersedia untuk perjalanan tepat 3 hari.';
+  updateCosts()
 }
 
 function addPerson(role){
+  if(role==='Driver 2'&&(!destination||destination.lama!==3||slots.some(p=>p.role===role)))return;
   if(slots.some(p=>p.role===role))return;
-  if(role==='Driver 2'&&(!destination||Number(destination.lama)!==3))return;
-
-  const p={role,selected:null,key:'p'+Date.now()+Math.random().toString(36).slice(2)};
-  slots.push(p);
-
-  const box=node('div',undefined,'person');
-  p.box=box;
-  const top=node('div',undefined,'person-top');
-  p.title=node('div',role,'person-role');top.appendChild(p.title);
-  if(role!=='Driver 1'){
-    const rm=node('button','Hapus','btn btn-danger');rm.type='button';
-    rm.onclick=()=>removePerson(p,true);top.appendChild(rm);
-  }
-  box.appendChild(top);
-
-  const lab=node('label','Nama petugas');box.appendChild(lab);
-  const wrap=node('div',undefined,'auto');
-  const input=node('input');input.autocomplete='off';
-  input.placeholder=role.startsWith('Driver')?'Cari nama driver / NIP…':'Cari nama perawat / NIP/NIK…';
-  const list=node('div',undefined,'suggestions');list.hidden=true;
-  wrap.append(input,list);box.appendChild(wrap);
-
+  const key='p'+Date.now()+Math.random().toString(36).slice(2),p={role,selected:null,key};slots.push(p);
+  const box=node('div',undefined,'person');p.box=box;const head=node('div',undefined,'person-title');p.title=node('strong',role);head.appendChild(p.title);
+  if(role!=='Driver 1'){const rm=node('button','Hapus','small danger');rm.type='button';rm.onclick=()=>removePerson(p,true);head.appendChild(rm)}box.appendChild(head);
+  const lab=node('label','Nama petugas');lab.htmlFor=key;box.appendChild(lab);
+  const wrap=node('div',undefined,'auto'),inp=node('input');inp.id=key;inp.required=true;inp.autocomplete='off';inp.placeholder=role.startsWith('Driver')?'Ketik nama driver / NIP…':'Ketik nama perawat / NIP/NIK…';
+  const list=node('div',undefined,'suggestions');list.hidden=true;wrap.append(inp,list);box.appendChild(wrap);
   p.meta=node('div','Pilih nama dari daftar agar identitas terisi.','person-meta');box.appendChild(p.meta);
-
-  const rlab=node('label','No. rekening (opsional)');box.appendChild(rlab);
-  p.account=node('input');p.account.placeholder='Boleh dikosongkan';p.account.maxLength=100;box.appendChild(p.account);
-
-  function pick(x){
-    p.selected=x;input.value=x.nama;p.account.value=x.rekening||'';
-    p.meta.textContent='NIP/NIK: '+(x.nip||'—')+' · '+(x.stts||'—')+' · '+(x.jabatan||'—');
-    updateCosts();
-  }
-  function clear(){
-    p.selected=null;p.account.value='';p.meta.textContent='Pilih nama dari daftar agar identitas terisi.';updateCosts();
-  }
-  autocomplete(input,list,()=>role.startsWith('Driver')?DATA.drivers:DATA.nurses,x=>x.nama,x=>(x.nip||'Tanpa NIP/NIK')+' · '+(x.jabatan||''),pick,clear);
-
-  $(role.startsWith('Driver')?'drivers':'nurses').appendChild(box);
-  syncButtons();updateCosts();
+  const rl=node('label','No rekening (opsional)');box.appendChild(rl);p.account=node('input');p.account.maxLength=100;p.account.placeholder='Boleh dikosongkan';box.appendChild(p.account);
+  function pick(x){p.selected=x;inp.value=x.nama;p.account.value=x.rekening||'';p.meta.textContent='NIP/NIK: '+(x.nip||'—')+' | STTS: '+(x.stts||'—')+' | Pangkat: '+(x.pangkat||'—')+' | Jabatan: '+(x.jabatan||'—');updateCosts()}
+  function clear(){p.selected=null;p.account.value='';p.meta.textContent='Pilih nama dari daftar agar identitas terisi.';updateCosts()}
+  autocomplete(inp,list,()=>role.startsWith('Driver')?DATA.drivers:DATA.nurses,x=>x.nama,x=>(x.nip||'Tanpa NIP/NIK')+' · '+x.jabatan,pick,clear);
+  el(role.startsWith('Driver')?'drivers':'nurses').appendChild(box);syncButtons();updateCosts()
 }
-
-function removePerson(p,update){
-  if(p.box)p.box.remove();
-  slots=slots.filter(x=>x!==p);
-  slots.filter(x=>x.role.startsWith('Perawat')).forEach((x,i)=>{
-    x.role='Perawat '+(i+1);x.title.textContent=x.role;
-  });
-  syncButtons();if(update)updateCosts();
-}
-function syncButtons(){
-  $('addNurse').disabled=slots.filter(p=>p.role.startsWith('Perawat')).length>=2;
-  $('addDriver').disabled=!destination||Number(destination.lama)!==3||slots.some(p=>p.role==='Driver 2');
-}
-$('addNurse').onclick=()=>{
-  const count=slots.filter(p=>p.role.startsWith('Perawat')).length;
-  if(count<2)addPerson('Perawat '+(count+1));
-};
-
-function returnDate(){
-  if(!destination||!$('berangkat').value)return'—';
-  const d=new Date($('berangkat').value+'T12:00:00');
-  d.setDate(d.getDate()+Number(destination.lama)-1);
-  return d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-}
-function addMoneyRow(label,value){
-  const row=node('div',undefined,'money-row');
-  row.append(node('span',label),node('strong',money(value)));$('costRows').appendChild(row);
-}
+function addNurse(){const c=slots.filter(p=>p.role.startsWith('Perawat')).length;if(c<2)addPerson('Perawat '+(c+1))}
+el('addNurseBtn').onclick=addNurse;
+function removePerson(p,up){p.box.remove();slots=slots.filter(x=>x!==p);slots.filter(x=>x.role.startsWith('Perawat')).forEach((x,i)=>{x.role='Perawat '+(i+1);x.title.textContent=x.role});syncButtons();if(up)updateCosts()}
+function syncButtons(){el('addNurseBtn').disabled=slots.filter(p=>p.role.startsWith('Perawat')).length>=2;el('addDriver').disabled=!destination||destination.lama!==3||slots.some(p=>p.role==='Driver 2')}
+function returnLabel(){if(!destination||!el('berangkat').value)return'—';const d=new Date(el('berangkat').value+'T12:00:00');d.setDate(d.getDate()+destination.lama-1);return d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}
+function costLine(c,l,v){const d=node('div',undefined,'money-line');d.append(node('span',l),node('strong',money(v)));c.appendChild(d)}
 function updateCosts(){
-  const fuel=DATA.bbm.find(x=>x.id===$('bbm').value);
-  const valid=destination&&!destination.error&&fuel&&!fuel.error;
-  $('travelInfo').textContent=destination
-    ? destination.lama+' hari · kembali '+returnDate()
-    : 'Lama perjalanan akan mengikuti tujuan.';
-  const fuelCost=valid?Math.round(Number(destination.liter)*Number(fuel.harga)):null;
-  $('fuelInfo').textContent=destination&&fuel
-    ? destination.liter+' liter × '+money(fuel.harga)+' = '+money(fuelCost)
-    : 'Pilih tujuan dan BBM.';
-  $('costRows').innerHTML='';
-  addMoneyRow('Biaya BBM',fuelCost);
-  slots.forEach(p=>addMoneyRow(p.role+(p.selected?' · '+p.selected.nama:''),destination?destination.sppd:null));
-  $('grandTotal').textContent=valid?money(fuelCost+slots.length*Number(destination.sppd)):'—';
+  const fuel=DATA.bbm.find(x=>x.id===el('bbm').value),valid=destination&&!destination.error&&fuel&&!fuel.error;
+  el('travelInfo').textContent=destination?destination.lama+' hari · Kembali '+returnLabel():'Lama perjalanan dan tanggal kembali mengikuti tujuan.';
+  const fc=valid?Math.round(destination.liter*fuel.harga):null;el('fuelInfo').textContent=destination&&fuel?destination.liter+' liter × '+money(fuel.harga)+' = '+money(fc):'Pilih tujuan dan jenis BBM.';
+  el('costs').textContent='';costLine(el('costs'),'Biaya BBM',fc);slots.forEach(p=>costLine(el('costs'),p.role+(p.selected?' · '+p.selected.nama:''),destination?destination.sppd:null));
+  el('total').textContent=valid?money(fc+slots.length*destination.sppd):'—';el('costNote').textContent=destination&&destination.error?destination.error:fuel&&fuel.error?fuel.error:'SPPD per orang untuk seluruh perjalanan. Rekening boleh kosong.'
 }
-$('berangkat').onchange=updateCosts;
-$('bbm').onchange=updateCosts;
+el('berangkat').onchange=updateCosts;el('bbm').onchange=updateCosts;
 
-function requestId(){
-  return window.crypto&&crypto.randomUUID
-    ? crypto.randomUUID()
-    : 'spt_'+Date.now()+'_'+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
-}
+autocomplete(el('tujuan'),el('tujuanList'),()=>DATA.tujuan,x=>x.nama,x=>x.lama+' hari · '+(x.liter===null?'Liter belum diisi':x.liter+' liter'),x=>{destination=x;syncDestination()},()=>{destination=null;syncDestination()});
+
+function requestId(){return crypto.randomUUID?crypto.randomUUID():'spt_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
 function readForm(){
-  if(!destination)throw Error('Pilih tujuan dari daftar.');
-  if(destination.error)throw Error(destination.error);
-  if(!$('bbm').value)throw Error('Pilih jenis BBM.');
-  if(!$('plat').value)throw Error('Pilih kendaraan.');
-  if(!$('berangkat').value)throw Error('Pilih tanggal berangkat.');
-  if(!$('pasien').value.trim())throw Error('Nama pasien / jenazah wajib diisi.');
-  if(!$('alamat').value.trim())throw Error('Alamat pasien / jenazah wajib diisi.');
-  if(slots.some(p=>!p.selected))throw Error('Pilih semua petugas dari daftar atau hapus petugas tambahan yang tidak digunakan.');
-
-  const keys=slots.map(p=>{
-    const nip=String(p.selected.nip||'').replace(/[^0-9a-z]/gi,'');
-    return nip&&!/^(na|nihil|null)$/i.test(nip)?'nip:'+nip:'nama:'+p.selected.nama.toLowerCase();
-  });
-  if(new Set(keys).size!==keys.length)throw Error('Petugas yang sama tidak boleh dipilih dua kali.');
-
-  return {
-    requestId:requestId(),
-    tujuanId:destination.id,
-    bbmId:$('bbm').value,
-    platId:$('plat').value,
-    berangkat:$('berangkat').value,
-    status:$('status').value,
-    pasien:$('pasien').value.trim(),
-    alamatPasien:$('alamat').value.trim(),
-    people:slots.map(p=>({id:p.selected.id,role:p.role,rekening:p.account.value.trim()}))
-  };
+  if(!destination)throw Error('Pilih tujuan dari daftar autocomplete.');if(destination.error)throw Error(destination.error);
+  if(slots.some(p=>!p.selected))throw Error('Pilih setiap nama petugas dari daftar autocomplete atau hapus petugas tambahan.');
+  const keys=slots.map(p=>{const n=String(p.selected.nip||'').replace(/[^0-9a-z]/gi,'');return n&&!/^(na|nihil|null)$/i.test(n)?'nip:'+n:'nama:'+p.selected.nama.trim().toLowerCase()});
+  if(new Set(keys).size!==keys.length)throw Error('Nama petugas yang sama tidak boleh dipilih dua kali.');
+  return {requestId:requestId(),tujuanId:destination.id,bbmId:el('bbm').value,platId:el('plat').value,berangkat:el('berangkat').value,status:el('status').value,pasien:el('pasien').value.trim(),alamatPasien:el('alamat').value.trim(),people:slots.map(p=>({id:p.selected.id,role:p.role,rekening:p.account.value.trim()}))}
 }
 
-$('tripForm').onsubmit=e=>{
-  e.preventDefault();
-  if(busy||completed)return;
-  try{
-    if(!pending)pending=readForm();
-    runGenerate(pending);
-  }catch(err){notice('processStatus',err.message,'error')}
-};
-
+el('form').onsubmit=e=>{e.preventDefault();if(busy||completed)return;try{if(!pending)pending=readForm();runGenerate(pending)}catch(err){showNotice('processStatus',err.message,'error')}};
 async function runGenerate(payload){
-  busy=true;
-  $('formFields').disabled=true;$('submitBtn').disabled=true;$('newBtn').disabled=true;
-  loading(true,'Membuat SPT','Membuat dokumen driver dan menyimpan rekap…');
-  notice('processStatus','');
-
+  switchTab('input');busy=true;el('fields').disabled=true;el('submitBtn').disabled=true;el('newBtn').disabled=true;el('submitBtn').textContent='Membuat dokumen…';
+  showNotice('processStatus','Sedang membuat SPT driver dan menyimpan rekap…');
   try{
-    const trip=await gas('generateSPT',payload);
-    pending=null;completed=true;
-    $('newBtn').disabled=false;
-    renderResult(trip);
-    notice('processStatus','SPT dan rekap berhasil dibuat.','success');
-    $('resultArea').hidden=false;
-    setTimeout(()=>$('resultArea').scrollIntoView({behavior:'smooth',block:'start'}),100);
+    const t=await postGenerate(payload);busy=false;completed=true;pending=null;el('newBtn').disabled=false;el('submitBtn').textContent='Dokumen sudah dibuat';
+    showNotice('processStatus','Selesai. SPT driver sudah dibuat dan rekap sudah disimpan.','success');
+    const r=el('result');r.textContent='';r.appendChild(renderTrip(t,false));r.hidden=false;r.scrollIntoView({behavior:'smooth',block:'start'});loadHistory()
   }catch(e){
-    $('submitBtn').disabled=false;$('newBtn').disabled=false;
-    notice('processStatus',e.message,'error');
-  }finally{
-    busy=false;loading(false);
+    busy=false;el('submitBtn').disabled=false;el('newBtn').disabled=false;el('submitBtn').textContent='Coba lagi / lanjutkan';
+    showNotice('processStatus',e.message+' Data formulir tetap dikunci untuk percobaan ulang.','error')
   }
 }
-
-function resetForm(){
-  if(busy)return;
-  $('tripForm').reset();
-  slots.forEach(p=>p.box&&p.box.remove());
-  slots=[];destination=null;pending=null;completed=false;
-  $('formFields').disabled=false;$('submitBtn').disabled=false;$('newBtn').disabled=false;
-  $('berangkat').value=DATA.today||'';
-  $('resultArea').hidden=true;$('resultArea').innerHTML='';
-  notice('processStatus','');
-  addPerson('Driver 1');updateCosts();
-  window.scrollTo({top:0,behavior:'smooth'});
+function newTrip(){
+  if(busy)return;el('form').reset();slots.forEach(p=>p.box.remove());slots=[];destination=null;pending=null;completed=false;el('fields').disabled=false;el('submitBtn').disabled=false;el('submitBtn').textContent='Buat SPT';el('berangkat').value=DATA.today||'';addPerson('Driver 1');showNotice('processStatus','');el('result').hidden=true;updateCosts();el('tujuan').focus()
 }
-
+function safeLink(url,label,cls){
+  const a=node('a',label,'button '+(cls||''));
+  if(/^https:\/\/(docs\.google\.com)\//.test(url||'')){
+    a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+  }
+  return a
+}
 function simpleReport(t){
-  const lines=[
-    'LAPORAN SPT AMBULAN',
-    'Tujuan: '+t.tujuan,
-    'Tanggal: '+t.berangkatText+' s/d '+t.kembaliText,
-    'Kendaraan: '+t.plat,''
-  ];
-  (t.people||[]).forEach(p=>{
-    lines.push(p.role+': '+p.nama);
-    lines.push('Rek: '+(p.rekening||'-')+' | SPPD: '+money(p.sppd));
-  });
-  lines.push('','BBM: '+t.liter+' L '+t.bbm+' = '+money(t.bbmTotal));
-  lines.push('TOTAL TRANSFER: '+money(t.total));
-  return lines.join('\n');
+  const lines=['LAPORAN SPT AMBULAN','Tujuan: '+t.tujuan,'Tanggal: '+t.berangkatText+' s/d '+t.kembaliText,'Kendaraan: '+t.plat,''];
+  (t.people||[]).forEach(p=>lines.push(p.role+': '+p.nama+' | Rek: '+(p.rekening||'-')+' | SPPD: '+money(p.sppd)));
+  lines.push('','BBM: '+t.liter+' L '+t.bbm+' = '+money(t.bbmTotal),'TOTAL TRANSFER: '+money(t.total));
+  return lines.join('\n')
 }
-
-function makeActionLink(url,label,primary){
-  const a=node('a',label,'btn '+(primary?'btn-primary':'btn-neutral'));
-  if(/^https:\/\/docs\.google\.com\//.test(url||'')){a.href=url;a.target='_blank';a.rel='noopener noreferrer'}
-  return a;
-}
-
-function renderTripCard(t,compact){
-  const card=node('section',undefined,'result-card');
-  const head=node('div',undefined,'result-head');
-  const copy=node('div');copy.append(node('h3','Laporan Perjalanan'),node('div',t.tujuan,'dest'));
-  head.append(copy,node('span',t.state||'SELESAI','badge'));card.appendChild(head);
-
-  const meta=node('div',undefined,'meta-grid');
-  [['Berangkat',t.berangkatText],['Kembali',t.kembaliText],['Kendaraan',t.plat]].forEach(x=>{
-    const b=node('div',undefined,'meta-box');b.append(node('span',x[0]),node('strong',x[1]||'—'));meta.appendChild(b);
-  });
-  card.appendChild(meta);
-
-  const people=node('div',undefined,'person-list');
-  (t.people||[]).forEach(p=>{
-    const line=node('div',undefined,'person-line');
-    const left=node('div');left.append(node('strong',p.role+' · '+p.nama),node('small',(p.jabatan||'')+' · Rek '+(p.rekening||'-')));
-    line.append(left,node('div',money(p.sppd),'amt'));people.appendChild(line);
-  });
-  card.appendChild(people);
-
-  const total=node('div',undefined,'result-total');
-  const tl=node('div');tl.append(node('span','TOTAL TRANSFER'));
-  total.append(tl,node('strong',money(t.total)));card.appendChild(total);
-
-  const actions=node('div',undefined,'result-actions');
+function renderTrip(t,compact){
+  const outer=node(compact?'div':'section',undefined,(compact?'':'card ')+'report-card');
+  const head=node('div',undefined,'result-title');head.append(node('h3','Laporan Perjalanan Ambulan'),node('span',t.state,'badge'));outer.appendChild(head);
+  outer.appendChild(node('div',t.tujuan,'report-destination'));
+  const meta=node('div',undefined,'trip-meta');[['Berangkat',t.berangkatText],['Kembali',t.kembaliText],['Kendaraan',t.plat]].forEach(p=>{const d=node('div');d.append(node('span',p[0]),node('strong',p[1]||'—'));meta.appendChild(d)});outer.appendChild(meta);
+  if(t.pasien)outer.appendChild(node('div',(t.status||'Pasien')+': '+t.pasien+(t.alamatPasien?' · '+t.alamatPasien:''),'hint'));
+  const tw=node('div',undefined,'table-wrap'),table=node('table');table.innerHTML='<thead><tr><th>Petugas</th><th>No. Rekening</th><th style="text-align:right">SPPD</th></tr></thead>';const tb=node('tbody');
+  (t.people||[]).forEach(p=>{const tr=node('tr'),td=node('td');td.append(node('strong',p.role+' · '+p.nama),node('div',p.jabatan||'','muted'));tr.append(td,node('td',p.rekening||'-'),node('td',money(p.sppd),'amount'));tb.appendChild(tr)});table.appendChild(tb);tw.appendChild(table);outer.appendChild(tw);
+  outer.appendChild(node('div','Rincian dana','report-label'));costLine(outer,'BBM '+t.bbm+' · '+t.liter+' liter × '+money(t.harga),t.bbmTotal);costLine(outer,'Total SPPD ('+(t.people||[]).length+' petugas)',t.sppdTotal);
+  const total=node('div',undefined,'total');total.append(node('span','TOTAL YANG HARUS DITRANSFER'),node('strong',money(t.total)));outer.appendChild(total);
+  const actions=node('div',undefined,'actions');
   (t.people||[]).filter(p=>String(p.role||'').startsWith('Driver')&&p.docUrl).forEach(p=>{
-    actions.appendChild(makeActionLink(p.docUrl,'📄 Lihat '+p.role,true));
-    if(p.pdfUrl)actions.appendChild(makeActionLink(p.pdfUrl,'⬇ PDF '+p.role,false));
+    actions.appendChild(safeLink(p.docUrl,'Lihat '+p.role,'primary'));
+    if(p.pdfUrl)actions.appendChild(safeLink(p.pdfUrl,'Download PDF '+p.role,''));
   });
-  if(t.rekapUrl)actions.appendChild(makeActionLink(t.rekapUrl,'▤ Buka Rekap',false));
+  if(t.rekapUrl)actions.appendChild(safeLink(t.rekapUrl,'Buka Rekap',''));
   if(t.state!=='SELESAI'){
-    const retry=node('button','↻ Lanjutkan proses','btn btn-primary');retry.onclick=()=>{pending={requestId:t.id};completed=false;runGenerate(pending)};actions.appendChild(retry);
+    const b=node('button','Coba lagi / lanjutkan','small primary');
+    b.onclick=()=>{pending={requestId:t.id};completed=false;runGenerate(pending)};
+    actions.appendChild(b)
   }
-  card.appendChild(actions);
+  outer.appendChild(actions);
 
-  const mini=node('div',undefined,'report-mini');
-  mini.appendChild(node('div','Ringkasan siap kirim / screenshot','report-mini-title'));
-  const txt=node('div',simpleReport(t),'report-text');
-  txt.onclick=async()=>{
-    try{await navigator.clipboard.writeText(txt.textContent);toast('Ringkasan disalin')}
-    catch(e){toast('Tekan lama teks untuk menyalin')}
-  };
-  mini.appendChild(txt);card.appendChild(mini);
-
-  if(t.error)card.appendChild(node('div',t.error,'notice error'));
-  return card;
+  const share=node('div',undefined,'share-card');share.appendChild(node('div','Ringkasan siap WhatsApp / screenshot','share-title'));
+  const txt=node('div',simpleReport(t),'share-text');txt.title='Klik untuk menyalin teks';txt.onclick=async()=>{try{await navigator.clipboard.writeText(txt.textContent);toast('Ringkasan disalin')}catch(_){const r=document.createRange();r.selectNodeContents(txt);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Teks dipilih — salin manual')}};share.appendChild(txt);
+  share.appendChild(node('div','Klik teks untuk menyalin. Di HP Anda juga bisa screenshot card ini langsung.','share-tip'));outer.appendChild(share);
+  if(t.error)outer.appendChild(node('div',t.error,'notice error'));return outer
 }
-
-function renderResult(t){
-  $('resultArea').innerHTML='';
-  $('resultArea').appendChild(renderTripCard(t,false));
-}
-
 async function loadHistory(){
-  $('historyStatus').textContent='Memuat riwayat…';
-  $('historyList').innerHTML='';
-  try{
-    const data=await gas('getRecentTrips');
-    const rows=data.rows||[];
-    $('historyStatus').textContent=rows.length?'':'Belum ada riwayat.';
-    rows.forEach(t=>{
-      const d=document.createElement('details');d.className='history-item';
-      const s=document.createElement('summary');
-      const ic=node('div','🚑','history-icon');
-      const cp=node('div',undefined,'history-copy');
-      cp.append(node('strong',t.tujuan||'Perjalanan'),node('span',(t.berangkatText||'')+' · '+((t.people||[]).map(p=>p.nama).join(', '))));
-      s.append(ic,cp,node('span','›','muted'));d.appendChild(s);
-      const body=node('div',undefined,'history-body');body.appendChild(renderTripCard(t,true));d.appendChild(body);
-      $('historyList').appendChild(d);
-    });
-  }catch(e){$('historyStatus').textContent='Gagal memuat: '+e.message}
+  if(historyBusy)return;historyBusy=true;el('historyRefresh').disabled=true;el('historyStatus').textContent='Memuat…';
+  try{const data=await jsonp('getRecentTrips');el('history').textContent='';(data.rows||[]).forEach(t=>{const d=node('details');d.appendChild(node('summary',(t.berangkatText||'Tanpa tanggal')+' · '+t.tujuan+' · '+(t.people||[]).map(p=>p.nama).join(', ')));const b=node('div',undefined,'details-body');b.appendChild(renderTrip(t,true));d.appendChild(b);el('history').appendChild(d)});el('historyStatus').textContent=el('history').children.length?'':'Belum ada perjalanan.'}
+  catch(e){el('historyStatus').textContent='Gagal memuat: '+e.message}finally{historyBusy=false;el('historyRefresh').disabled=false}
 }
 
-loadData();
+if(apiReady())loadData();else{showNotice('loadStatus','Belum terhubung ke GAS. Isi konstanta GAS_URL di index.html lalu upload ke GitHub Pages.','error');el('reloadData').hidden=false}
 </script>
 </body>
 </html>
