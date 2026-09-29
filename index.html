@@ -146,6 +146,27 @@
       #rekapPanel>.section-head{align-items:center;padding:12px 13px}
     }
 
+
+    .actions .primary{
+      min-height:52px;
+      font-size:12px;
+      line-height:1.35;
+      padding:12px 14px;
+      background:linear-gradient(135deg,#0d7565,#0a5d52);
+      box-shadow:0 7px 18px rgba(13,107,93,.18);
+    }
+    .actions .primary::first-letter{font-size:14px}
+    .download-note{
+      margin-top:9px;
+      padding:10px 12px;
+      background:#eef7f4;
+      border:1px solid #d9ebe6;
+      border-radius:12px;
+      color:#52716c;
+      font-size:11px;
+      line-height:1.5
+    }
+
 </style>
 </head>
 <body>
@@ -153,7 +174,7 @@
 <main>
   <nav class="tabs">
     <button id="inputTab" aria-selected="true" onclick="switchTab('input')">✚ Buat SPT</button>
-    <button id="rekapTab" aria-selected="false" onclick="switchTab('rekap')">▤ Rekap & SPT</button>
+    <button id="rekapTab" aria-selected="false" onclick="switchTab('rekap')">▤ Hasil SPT</button>
   </nav>
 
   <section id="inputPanel">
@@ -217,7 +238,7 @@
   </section>
 
   <section id="rekapPanel" hidden>
-    <div class="section-head"><div><h2 style="font-size:20px;margin:0">Rekap & Dokumen SPT</h2><div class="hint">Klik perjalanan untuk melihat rincian dan membuka SPT setiap driver.</div></div><button id="historyRefresh" onclick="loadHistory()">↻ Refresh</button></div>
+    <div class="section-head"><div><h2 style="font-size:20px;margin:0">Hasil SPT Terbaru</h2><div class="hint">Klik perjalanan untuk melihat rincian. Tombol SPT membuka PDF yang siap di-download atau di-print.</div></div><button id="historyRefresh" onclick="loadHistory()">↻ Refresh</button></div>
     <div id="historyStatus" class="hint"></div><div id="history"></div>
   </section>
 </main>
@@ -233,7 +254,7 @@
   <div class="loading-box">
     <div class="loader-ring"></div>
     <h3>Membuat SPT</h3>
-    <p>Mohon jangan tutup halaman. Dokumen driver sedang dibuat dan URL sedang disimpan ke rekap.</p>
+    <p>Mohon tunggu. Form sudah dikosongkan dan dokumen SPT sedang diproses.</p>
     <div id="loadingStep" class="loading-step">Menyiapkan dokumen…</div>
   </div>
 </div>
@@ -431,6 +452,55 @@ el('berangkat').onchange=updateCosts;el('bbm').onchange=updateCosts;
 autocomplete(el('tujuan'),el('tujuanList'),()=>DATA.tujuan,x=>x.nama,x=>x.lama+' hari · '+(x.liter===null?'Liter belum diisi':x.liter+' liter'),x=>{destination=x;syncDestination()},()=>{destination=null;syncDestination()});
 
 function requestId(){return crypto.randomUUID?crypto.randomUUID():'spt_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
+
+function clearFormForProcessing(){
+  // Form dikosongkan segera setelah tombol Buat SPT ditekan.
+  el('form').reset();
+
+  slots.forEach(p=>{ if(p.box) p.box.remove(); });
+  slots=[];
+  destination=null;
+
+  el('tujuan').value='';
+  el('berangkat').value='';
+  el('plat').value='';
+  el('bbm').value='';
+  el('status').value='Pasien';
+  el('pasien').value='';
+  el('alamat').value='';
+
+  el('drivers').textContent='';
+  el('nurses').textContent='';
+  el('costs').textContent='';
+  el('total').textContent='—';
+  el('travelInfo').textContent='Lama perjalanan dan tanggal kembali mengikuti tujuan.';
+  el('fuelInfo').textContent='Pilih tujuan dan jenis BBM.';
+  el('addDriver').disabled=true;
+  el('addNurseBtn').disabled=true;
+
+  // Tidak menambahkan Driver 1 saat proses masih berjalan.
+  // Setelah proses selesai, form baru akan disiapkan kembali.
+}
+
+function prepareFreshForm(){
+  el('form').reset();
+  slots.forEach(p=>{ if(p.box) p.box.remove(); });
+  slots=[];
+  destination=null;
+  pending=null;
+  completed=false;
+
+  el('fields').disabled=false;
+  el('submitBtn').disabled=false;
+  el('newBtn').disabled=false;
+  el('submitBtn').textContent='Buat SPT';
+  el('berangkat').value=DATA.today||'';
+
+  if(!slots.length)addPerson('Driver 1');
+  syncButtons();
+  updateCosts();
+}
+
 function readForm(){
   if(!destination)throw Error('Pilih tujuan dari daftar autocomplete.');
   if(destination.error)throw Error(destination.error);
@@ -481,55 +551,90 @@ function readForm(){
   };
 }
 
-el('form').onsubmit=e=>{e.preventDefault();if(busy||completed)return;try{if(!pending)pending=readForm();runGenerate(pending)}catch(err){showNotice('processStatus',err.message,'error')}};
+el('form').onsubmit=e=>{
+  e.preventDefault();
+  if(busy||completed)return;
+
+  try{
+    const payload=readForm();
+    pending=payload;
+
+    // Sesuai alur baru: setelah klik Buat SPT, semua input langsung kosong.
+    clearFormForProcessing();
+
+    runGenerate(payload);
+  }catch(err){
+    showNotice('processStatus',err.message,'error');
+  }
+};
 async function runGenerate(payload){
   switchTab('input');
   busy=true;
+
   el('fields').disabled=true;
   el('submitBtn').disabled=true;
   el('newBtn').disabled=true;
   el('submitBtn').textContent='Memproses…';
+
   showNotice('processStatus','');
-  showCreateLoading(true,'Membuat dokumen SPT driver…');
+  showCreateLoading(true,'Menyiapkan data perjalanan…');
 
   try{
+    showCreateLoading(true,'Membuat dokumen SPT driver…');
     const t=await postGenerate(payload);
 
-    busy=false;
-    completed=true;
-    pending=null;
-    el('newBtn').disabled=false;
-    el('submitBtn').textContent='SPT berhasil dibuat';
+    showCreateLoading(true,'Menyimpan URL SPT ke rekap…');
 
-    showCreateLoading(true,'SPT selesai. Membuka Rekap…');
-
-    // Tidak berhenti di halaman form. Langsung buka menu Rekap & SPT.
+    // Muat riwayat terbaru terlebih dahulu.
     await loadHistory(t.id);
+
+    busy=false;
+    pending=null;
+
+    // Siapkan form baru dalam keadaan kosong untuk perjalanan berikutnya.
+    prepareFreshForm();
+
+    // Langsung pindah ke Rekap & SPT, buka hasil yang baru dibuat.
     switchTab('rekap');
 
     setTimeout(()=>{
       showCreateLoading(false);
+
       const target=document.querySelector('[data-trip-id="'+CSS.escape(String(t.id||''))+'"]');
       if(target){
         target.open=true;
         target.classList.add('created-flash');
         target.scrollIntoView({behavior:'smooth',block:'center'});
       }
-      toast('SPT berhasil dibuat dan masuk ke Rekap');
-    },350);
+
+      toast('SPT berhasil dibuat — siap download atau print');
+    },300);
 
   }catch(e){
     busy=false;
+    showCreateLoading(false);
+
+    // Payload masih tersimpan di pending untuk retry meskipun form sudah dikosongkan.
+    el('fields').disabled=false;
     el('submitBtn').disabled=false;
     el('newBtn').disabled=false;
     el('submitBtn').textContent='Coba lagi / lanjutkan';
-    showCreateLoading(false);
-    showNotice('processStatus',e.message+' Data formulir tetap dikunci untuk percobaan ulang.','error');
+
+    showNotice(
+      'processStatus',
+      e.message+' Data proses masih tersimpan untuk percobaan ulang.',
+      'error'
+    );
   }
 }
 function newTrip(){
-  if(busy)return;el('form').reset();slots.forEach(p=>p.box.remove());slots=[];destination=null;pending=null;completed=false;el('fields').disabled=false;el('submitBtn').disabled=false;el('submitBtn').textContent='Buat SPT';el('berangkat').value=DATA.today||'';addPerson('Driver 1');showNotice('processStatus','');el('result').hidden=true;updateCosts();el('tujuan').focus()
+  if(busy)return;
+  prepareFreshForm();
+  showNotice('processStatus','');
+  el('result').hidden=true;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+
 function safeLink(url,label,cls){
   const a=node('a',label,'button '+(cls||''));
   if(/^https:\/\/(docs\.google\.com)\//.test(url||'')){
@@ -555,15 +660,20 @@ function renderTrip(t,compact){
   const total=node('div',undefined,'total');total.append(node('span','TOTAL YANG HARUS DITRANSFER'),node('strong',money(t.total)));outer.appendChild(total);
   const actions=node('div',undefined,'actions');
   (t.people||[]).filter(p=>String(p.role||'').startsWith('Driver')&&p.docUrl).forEach(p=>{
-    actions.appendChild(safeLink(p.docUrl,'Buka SPT '+p.role,'primary'));
+    const match=String(p.docUrl).match(/\/document\/d\/([^/]+)/);
+    const pdfUrl=match ? 'https://docs.google.com/document/d/'+match[1]+'/export?format=pdf' : p.docUrl;
+    const label='⬇ Download & Print SPT Driver ('+(p.nama||p.role)+')';
+    actions.appendChild(safeLink(pdfUrl,label,'primary'));
   });
-  if(t.rekapUrl)actions.appendChild(safeLink(t.rekapUrl,'Buka Rekap',''));
   if(t.state!=='SELESAI'){
     const b=node('button','Coba lagi / lanjutkan','small primary');
     b.onclick=()=>{pending={requestId:t.id};completed=false;runGenerate(pending)};
     actions.appendChild(b)
   }
   outer.appendChild(actions);
+  if((t.people||[]).some(p=>String(p.role||'').startsWith('Driver')&&p.docUrl)){
+    outer.appendChild(node('div','Tombol di atas membuka file PDF SPT. Dari tampilan PDF Anda dapat langsung download atau print.','download-note'));
+  }
 
   const share=node('div',undefined,'share-card');share.appendChild(node('div','Ringkasan siap WhatsApp / screenshot','share-title'));
   const txt=node('div',simpleReport(t),'share-text');txt.title='Klik untuk menyalin teks';txt.onclick=async()=>{try{await navigator.clipboard.writeText(txt.textContent);toast('Ringkasan disalin')}catch(_){const r=document.createRange();r.selectNodeContents(txt);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Teks dipilih — salin manual')}};share.appendChild(txt);
