@@ -36,7 +36,7 @@
     button:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--brand);color:#fff}.danger{background:#fff0ed;color:var(--danger)}
     .small{padding:8px 10px;font-size:12px}.info{padding:11px 12px;border-radius:10px;background:#f1f7f5;color:#456b64;font-size:12px;line-height:1.6}
     .person{position:relative;border:1px solid #e0e9e7;border-radius:12px;padding:13px;margin-top:11px}.person-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:11px}
-    .person-meta{font-size:12px;line-height:1.6;background:#f7f9f9;border-radius:9px;padding:10px;margin:9px 0;overflow-wrap:anywhere}
+    .person-meta{font-size:12px;line-height:1.6;background:#f7f9f9;border-radius:9px;padding:10px;margin:9px 0;overflow-wrap:anywhere}.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.manual-grid .wide{grid-column:1/-1}@media(max-width:560px){.manual-grid{grid-template-columns:1fr}.manual-grid .wide{grid-column:auto}}
     .auto{position:relative}.auto:focus-within{z-index:20}.suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 12px 30px #153d4425;max-height:250px;overflow:auto;z-index:30}
     .suggestions button{width:100%;display:block;text-align:left;background:#fff;border-radius:0;border-bottom:1px solid #edf3f1;font-weight:400}.suggestions strong{display:block;margin-bottom:3px}
     .summary{position:sticky;top:14px}.money-line{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}.money-line strong{white-space:nowrap}
@@ -61,14 +61,99 @@
       .actions .button,.actions button{width:100%}.share-text{font-size:12px}.intro h2{font-size:19px}
     }
     @media(max-width:390px){main{padding-left:8px;padding-right:8px}.card{padding:12px}.trip-meta{grid-template-columns:1fr}.trip-meta>div:last-child{grid-column:auto}}
-  </style>
+  
+    /* ===== UI V2 — Professional Mobile App ===== */
+    :root{
+      --bg:#f4f7f6;--card:#ffffff;--ink:#162b29;--muted:#71817f;--line:#e0e9e7;
+      --brand:#0d6b5d;--brand2:#113f3a;--soft:#eaf5f2;--danger:#b4473b;--warn:#8d611f;
+      --shadow:0 10px 35px rgba(18,65,59,.08)
+    }
+    body{background:linear-gradient(180deg,#f8fbfa 0,#f2f6f5 260px,#f4f7f6 100%);padding-bottom:28px}
+    header{
+      position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
+      color:var(--ink);border-bottom:1px solid #e5eeec;padding:13px max(16px,calc((100vw - 1120px)/2));
+      box-shadow:0 3px 18px rgba(20,58,54,.05)
+    }
+    .head h1{font-size:19px;margin:0 0 2px;letter-spacing:-.02em}.head p{color:var(--muted);font-size:11px}
+    .hospital{border:0;background:var(--soft);color:var(--brand);font-weight:800;padding:8px 11px}
+    main{padding-top:14px}
+    .tabs{
+      position:sticky;top:73px;z-index:40;width:100%;max-width:420px;margin:0 auto 18px;
+      display:grid;grid-template-columns:1fr 1fr;background:#e9f0ee;padding:4px;border-radius:15px;
+      box-shadow:0 5px 18px rgba(15,64,57,.05)
+    }
+    .tabs button{padding:11px 12px;border-radius:12px;font-size:12px}
+    .tabs button[aria-selected="true"]{background:#fff;color:var(--brand);box-shadow:0 4px 12px rgba(21,72,65,.09)}
+    .intro{
+      background:linear-gradient(145deg,#113f3a,#0d7463);color:#fff;border-radius:22px;padding:20px;
+      margin-bottom:15px;box-shadow:0 14px 32px rgba(16,74,66,.15)
+    }
+    .intro h2{font-size:22px;margin:0 0 7px}.intro .hint{color:#d9efeb;font-size:12px}
+    .card{border-radius:20px;padding:18px;border-color:#e2ebe9;box-shadow:0 7px 24px rgba(24,66,61,.055)}
+    .section-head h3{font-size:15px}.step{width:31px;height:31px;border-radius:11px;font-weight:900}
+    input,select,textarea{border-radius:13px;min-height:47px;background:#fbfdfc;border-color:#d7e4e1}
+    input:focus,select:focus,textarea:focus{background:#fff;outline:4px solid rgba(13,107,93,.08);border-color:#65a99f}
+    button,.button{border-radius:13px;min-height:43px}
+    .primary{background:linear-gradient(135deg,#0d7565,#0b5d52);box-shadow:0 5px 14px rgba(13,107,93,.16)}
+    .summary .card{
+      background:linear-gradient(150deg,#123f3a,#0d6c5e);color:#fff;border:0;
+      box-shadow:0 14px 30px rgba(16,72,64,.17)
+    }
+    .summary .card h3,.summary .card .hint,.summary .card .muted{color:#e1f2ef}
+    .summary .money-line{border-bottom:1px solid rgba(255,255,255,.10);padding:9px 0}
+    .summary .total{border-top:1px solid rgba(255,255,255,.22)}
+    .summary .total strong{color:#fff;font-size:28px}
+    #rekapPanel>.section-head{
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px;
+      box-shadow:0 5px 18px rgba(20,64,58,.05)
+    }
+    details{
+      border-radius:18px;border-color:#e1ebe8;box-shadow:0 6px 20px rgba(20,64,58,.05);margin:10px 0
+    }
+    summary{
+      padding:15px 16px;position:relative;padding-right:44px;background:#fff;
+    }
+    summary::after{content:'›';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:23px;color:#8aa09c}
+    details[open] summary::after{transform:translateY(-50%) rotate(90deg)}
+    .report-card{border-radius:18px!important}
+    .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .actions .button,.actions button{width:100%;min-height:46px}
+    .share-card{border-style:solid;background:#f7faf9;border-radius:16px}
+    .toast{bottom:28px}
+
+    .loading-mask{
+      position:fixed;inset:0;z-index:999;display:grid;place-items:center;padding:22px;
+      background:rgba(8,32,29,.50);backdrop-filter:blur(6px)
+    }
+    .loading-box{
+      width:min(360px,100%);background:#fff;border-radius:24px;padding:24px;text-align:center;
+      box-shadow:0 25px 70px rgba(0,0,0,.24)
+    }
+    .loader-ring{
+      width:52px;height:52px;border-radius:50%;margin:0 auto 16px;border:5px solid #e6f1ee;
+      border-top-color:var(--brand);animation:spin .85s linear infinite
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-box h3{margin:0 0 7px;font-size:18px}.loading-box p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
+    .loading-step{margin-top:15px;background:#eef6f4;border-radius:12px;padding:10px;color:var(--brand);font-size:11px;font-weight:800}
+    .created-flash{animation:createdFlash 1.8s ease}
+    @keyframes createdFlash{0%,35%{box-shadow:0 0 0 4px rgba(13,107,93,.16),0 12px 28px rgba(20,64,58,.08)}100%{box-shadow:0 6px 20px rgba(20,64,58,.05)}}
+    @media(max-width:600px){
+      body{padding-bottom:20px}
+      header{padding:12px 14px}.tabs{top:67px;margin-bottom:12px}
+      main{padding:11px 9px 36px}.intro{padding:17px;border-radius:19px}.intro h2{font-size:20px}
+      .card{padding:14px;border-radius:17px}.actions{grid-template-columns:1fr}
+      #rekapPanel>.section-head{align-items:center;padding:12px 13px}
+    }
+
+</style>
 </head>
 <body>
-<header><div class="head"><div><h1>🚑 SPT Ambulan RSDS</h1><p>SPT driver, rekap perjalanan & rincian transfer</p></div><div class="hospital">RSUD dr. Soedarso</div></div></header>
+<header><div class="head"><div><h1>🚑 SPT Ambulan RSDS</h1><p>Administrasi perjalanan ambulan · SPT & rekap</p></div><div class="hospital">RSUD dr. Soedarso</div></div></header>
 <main>
   <nav class="tabs">
-    <button id="inputTab" aria-selected="true" onclick="switchTab('input')">Buat SPT</button>
-    <button id="rekapTab" aria-selected="false" onclick="switchTab('rekap')">Rekap</button>
+    <button id="inputTab" aria-selected="true" onclick="switchTab('input')">✚ Buat SPT</button>
+    <button id="rekapTab" aria-selected="false" onclick="switchTab('rekap')">▤ Rekap & SPT</button>
   </nav>
 
   <section id="inputPanel">
@@ -76,8 +161,8 @@
     <button id="reloadData" hidden onclick="loadData()">Muat ulang data</button>
 
     <div class="intro">
-      <h2>Buat surat perjalanan</h2>
-      <div class="hint">Mekanisme cepat: 1 Google Docs SPT per driver. URL SPT otomatis disimpan di kolom W (Url SPT) pada Rekap-baru dan dapat diklik per nama.</div>
+      <h2>Perjalanan baru</h2>
+      <div class="hint">Isi data perjalanan. Setelah SPT selesai dibuat, aplikasi otomatis membuka Rekap agar dokumen dapat langsung dilihat dan diklik.</div>
     </div>
 
     <form id="form">
@@ -102,7 +187,7 @@
 
           <section class="card">
             <div class="section-head"><h3><span class="step">03</span>Perawat pendamping</h3><button type="button" class="small" id="addNurseBtn">+ Perawat</button></div>
-            <div class="hint">Opsional, maksimal 2 orang. Perawat tidak dibuatkan SPT.</div><div id="nurses"></div>
+            <div class="hint">Opsional, maksimal 2 orang. Identitas perawat diketik manual agar aplikasi lebih cepat.</div><div id="nurses"></div>
           </section>
 
           <section class="card">
@@ -132,7 +217,7 @@
   </section>
 
   <section id="rekapPanel" hidden>
-    <div class="section-head"><div><h2 style="font-size:20px;margin:0">Perjalanan terakhir</h2><div class="hint">Ringkasan perjalanan terakhir yang tersimpan.</div></div><button id="historyRefresh" onclick="loadHistory()">↻ Muat ulang</button></div>
+    <div class="section-head"><div><h2 style="font-size:20px;margin:0">Rekap & Dokumen SPT</h2><div class="hint">Klik perjalanan untuk melihat rincian dan membuka SPT setiap driver.</div></div><button id="historyRefresh" onclick="loadHistory()">↻ Refresh</button></div>
     <div id="historyStatus" class="hint"></div><div id="history"></div>
   </section>
 </main>
@@ -143,6 +228,16 @@
   <input name="payload" id="gasPayload">
   <input name="token" id="gasToken">
 </form>
+
+<div id="createLoading" class="loading-mask" hidden aria-live="polite">
+  <div class="loading-box">
+    <div class="loader-ring"></div>
+    <h3>Membuat SPT</h3>
+    <p>Mohon jangan tutup halaman. Dokumen driver sedang dibuat dan URL sedang disimpan ke rekap.</p>
+    <div id="loadingStep" class="loading-step">Menyiapkan dokumen…</div>
+  </div>
+</div>
+
 <div id="toast" class="toast" hidden></div>
 
 <script>
@@ -151,15 +246,20 @@
 /* WAJIB: ganti dengan URL deployment Web App GAS (/exec), bukan URL editor. */
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbytPTdXyOsDGNh3coAXHz189fH0eJoYUkaDE-ytoSZsHfKVy3EVqvkPXwsT2JmDIrheDA/exec';
 
-let DATA={drivers:[],nurses:[],tujuan:[],bbm:[],plat:[]}, destination=null, slots=[], pending=null, busy=false, completed=false, historyBusy=false;
+let DATA={drivers:[],tujuan:[],bbm:[],plat:[]}, destination=null, slots=[], pending=null, busy=false, completed=false, historyBusy=false;
 const el=id=>document.getElementById(id);
 const node=(tag,txt,cls)=>{const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n};
 const money=n=>Number.isFinite(n)?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n):'—';
 
 function toast(msg){const t=el('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.hidden=true,1800)}
 function showNotice(id,text,type){const n=el(id);n.textContent=text;n.className='notice'+(type?' '+type:'');n.hidden=!text}
+function showCreateLoading(show,text){
+  const box=el('createLoading');
+  box.hidden=!show;
+  if(text)el('loadingStep').textContent=text;
+}
 function apiReady(){return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec/.test(GAS_URL)}
-function switchTab(tab){const r=tab==='rekap';el('inputPanel').hidden=r;el('rekapPanel').hidden=!r;el('inputTab').setAttribute('aria-selected',String(!r));el('rekapTab').setAttribute('aria-selected',String(r));if(r&&!historyBusy)loadHistory()}
+function switchTab(tab){const r=tab==='rekap';el('inputPanel').hidden=r;el('rekapPanel').hidden=!r;el('inputTab').setAttribute('aria-selected',String(!r));el('rekapTab').setAttribute('aria-selected',String(r));if(r&&!historyBusy&&!el('history').children.length)loadHistory()}
 
 function jsonp(action){
   return new Promise((resolve,reject)=>{
@@ -195,7 +295,7 @@ function postGenerate(payload){
 function fillSelect(id,items,label,placeholder){const s=el(id);s.textContent='';const f=node('option',placeholder);f.value='';s.appendChild(f);items.forEach(x=>{const o=node('option',label(x));o.value=x.id;s.appendChild(o)})}
 
 async function loadData(){
-  el('reloadData').hidden=true;showNotice('loadStatus','Memuat data tujuan, petugas, kendaraan, dan BBM…');
+  el('reloadData').hidden=true;showNotice('loadStatus','Memuat tujuan, driver, kendaraan, dan BBM…');
   try{
     DATA=await jsonp('getAppData');el('berangkat').value=DATA.today;
     fillSelect('plat',DATA.plat,p=>p.plat+(p.mobil?' · '+p.mobil:''),'Pilih plat mobil');
@@ -226,18 +326,92 @@ function syncDestination(){
 function addPerson(role){
   if(role==='Driver 2'&&(!destination||destination.lama!==3||slots.some(p=>p.role===role)))return;
   if(slots.some(p=>p.role===role))return;
-  const key='p'+Date.now()+Math.random().toString(36).slice(2),p={role,selected:null,key};slots.push(p);
-  const box=node('div',undefined,'person');p.box=box;const head=node('div',undefined,'person-title');p.title=node('strong',role);head.appendChild(p.title);
-  if(role!=='Driver 1'){const rm=node('button','Hapus','small danger');rm.type='button';rm.onclick=()=>removePerson(p,true);head.appendChild(rm)}box.appendChild(head);
-  const lab=node('label','Nama petugas');lab.htmlFor=key;box.appendChild(lab);
-  const wrap=node('div',undefined,'auto'),inp=node('input');inp.id=key;inp.required=true;inp.autocomplete='off';inp.placeholder=role.startsWith('Driver')?'Ketik nama driver / NIP…':'Ketik nama perawat / NIP/NIK…';
-  const list=node('div',undefined,'suggestions');list.hidden=true;wrap.append(inp,list);box.appendChild(wrap);
-  p.meta=node('div','Pilih nama dari daftar agar identitas terisi.','person-meta');box.appendChild(p.meta);
-  const rl=node('label','No rekening (opsional)');box.appendChild(rl);p.account=node('input');p.account.maxLength=100;p.account.placeholder='Boleh dikosongkan';box.appendChild(p.account);
-  function pick(x){p.selected=x;inp.value=x.nama;p.account.value=x.rekening||'';p.meta.textContent='NIP/NIK: '+(x.nip||'—')+' | STTS: '+(x.stts||'—')+' | Pangkat: '+(x.pangkat||'—')+' | Jabatan: '+(x.jabatan||'—');updateCosts()}
-  function clear(){p.selected=null;p.account.value='';p.meta.textContent='Pilih nama dari daftar agar identitas terisi.';updateCosts()}
-  autocomplete(inp,list,()=>role.startsWith('Driver')?DATA.drivers:DATA.nurses,x=>x.nama,x=>(x.nip||'Tanpa NIP/NIK')+' · '+x.jabatan,pick,clear);
-  el(role.startsWith('Driver')?'drivers':'nurses').appendChild(box);syncButtons();updateCosts()
+
+  const key='p'+Date.now()+Math.random().toString(36).slice(2);
+  const p={role,selected:null,key,manual:null};
+  slots.push(p);
+
+  const box=node('div',undefined,'person');p.box=box;
+  const head=node('div',undefined,'person-title');p.title=node('strong',role);head.appendChild(p.title);
+
+  if(role!=='Driver 1'){
+    const rm=node('button','Hapus','small danger');
+    rm.type='button';rm.onclick=()=>removePerson(p,true);head.appendChild(rm);
+  }
+  box.appendChild(head);
+
+  // DRIVER: tetap autocomplete dari sheet Nama-Driver
+  if(role.startsWith('Driver')){
+    const lab=node('label','Nama driver');lab.htmlFor=key;box.appendChild(lab);
+    const wrap=node('div',undefined,'auto');
+    const inp=node('input');inp.id=key;inp.required=true;inp.autocomplete='off';inp.placeholder='Ketik nama driver / NIP…';
+    const list=node('div',undefined,'suggestions');list.hidden=true;
+    wrap.append(inp,list);box.appendChild(wrap);
+
+    p.meta=node('div','Pilih driver dari daftar agar identitas terisi otomatis.','person-meta');box.appendChild(p.meta);
+
+    const rl=node('label','No rekening (opsional)');box.appendChild(rl);
+    p.account=node('input');p.account.maxLength=100;p.account.placeholder='Boleh dikosongkan';box.appendChild(p.account);
+
+    function pick(x){
+      p.selected=x;
+      inp.value=x.nama;
+      p.account.value=x.rekening||'';
+      p.meta.textContent='NIP/NIK: '+(x.nip||'—')+' | STTS: '+(x.stts||'—')+' | Pangkat: '+(x.pangkat||'—')+' | Jabatan: '+(x.jabatan||'—');
+      updateCosts();
+    }
+    function clear(){
+      p.selected=null;
+      p.account.value='';
+      p.meta.textContent='Pilih driver dari daftar agar identitas terisi otomatis.';
+      updateCosts();
+    }
+
+    autocomplete(inp,list,()=>DATA.drivers,x=>x.nama,x=>(x.nip||'Tanpa NIP')+' · '+x.jabatan,pick,clear);
+  }
+
+  // PERAWAT: SEMUA IDENTITAS DIKETIK MANUAL
+  else {
+    p.manual={};
+    const note=node('div','Isi manual. Data perawat tidak lagi dimuat dari sheet Data-Base sehingga loading awal lebih cepat.','person-meta');
+    box.appendChild(note);
+
+    const grid=node('div',undefined,'manual-grid');
+
+    function field(labelText,name,placeholder,required,wide){
+      const wrap=node('div');if(wide)wrap.className='wide';
+      const lab=node('label',labelText);wrap.appendChild(lab);
+      const input=node('input');input.placeholder=placeholder||'';input.maxLength=name==='rekening'?100:150;
+      if(required)input.required=true;
+      p.manual[name]=input;
+      input.addEventListener('input',()=>{
+        p.selected={
+          id:'manual:'+p.role,
+          nama:(p.manual.nama.value||'').trim(),
+          nip:(p.manual.nip.value||'').trim(),
+          stts:(p.manual.stts.value||'').trim(),
+          pangkat:(p.manual.pangkat.value||'').trim(),
+          jabatan:(p.manual.jabatan.value||'').trim()
+        };
+        updateCosts();
+      });
+      wrap.appendChild(input);grid.appendChild(wrap);
+      return input;
+    }
+
+    field('Nama perawat','nama','Nama lengkap',true,true);
+    field('NIP / NIK','nip','Boleh dikosongkan',false,false);
+    field('STTS','stts','Contoh: ASN / BLUD',false,false);
+    field('Pangkat','pangkat','Boleh dikosongkan',false,false);
+    field('Jabatan','jabatan','Contoh: Perawat',false,false);
+    p.account=field('No rekening','rekening','Boleh dikosongkan',false,true);
+    grid.appendChild(document.createElement('span'));
+    box.appendChild(grid);
+  }
+
+  el(role.startsWith('Driver')?'drivers':'nurses').appendChild(box);
+  syncButtons();
+  updateCosts();
 }
 function addNurse(){const c=slots.filter(p=>p.role.startsWith('Perawat')).length;if(c<2)addPerson('Perawat '+(c+1))}
 el('addNurseBtn').onclick=addNurse;
@@ -249,7 +423,7 @@ function updateCosts(){
   const fuel=DATA.bbm.find(x=>x.id===el('bbm').value),valid=destination&&!destination.error&&fuel&&!fuel.error;
   el('travelInfo').textContent=destination?destination.lama+' hari · Kembali '+returnLabel():'Lama perjalanan dan tanggal kembali mengikuti tujuan.';
   const fc=valid?Math.round(destination.liter*fuel.harga):null;el('fuelInfo').textContent=destination&&fuel?destination.liter+' liter × '+money(fuel.harga)+' = '+money(fc):'Pilih tujuan dan jenis BBM.';
-  el('costs').textContent='';costLine(el('costs'),'Biaya BBM',fc);slots.forEach(p=>costLine(el('costs'),p.role+(p.selected?' · '+p.selected.nama:''),destination?destination.sppd:null));
+  el('costs').textContent='';costLine(el('costs'),'Biaya BBM',fc);slots.forEach(p=>{const nm=p.role.startsWith('Driver')?(p.selected&&p.selected.nama):(p.manual&&p.manual.nama&&p.manual.nama.value.trim());costLine(el('costs'),p.role+(nm?' · '+nm:''),destination?destination.sppd:null)});
   el('total').textContent=valid?money(fc+slots.length*destination.sppd):'—';el('costNote').textContent=destination&&destination.error?destination.error:fuel&&fuel.error?fuel.error:'SPPD per orang untuk seluruh perjalanan. Rekening boleh kosong.'
 }
 el('berangkat').onchange=updateCosts;el('bbm').onchange=updateCosts;
@@ -258,24 +432,99 @@ autocomplete(el('tujuan'),el('tujuanList'),()=>DATA.tujuan,x=>x.nama,x=>x.lama+'
 
 function requestId(){return crypto.randomUUID?crypto.randomUUID():'spt_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
 function readForm(){
-  if(!destination)throw Error('Pilih tujuan dari daftar autocomplete.');if(destination.error)throw Error(destination.error);
-  if(slots.some(p=>!p.selected))throw Error('Pilih setiap nama petugas dari daftar autocomplete atau hapus petugas tambahan.');
-  const keys=slots.map(p=>{const n=String(p.selected.nip||'').replace(/[^0-9a-z]/gi,'');return n&&!/^(na|nihil|null)$/i.test(n)?'nip:'+n:'nama:'+p.selected.nama.trim().toLowerCase()});
+  if(!destination)throw Error('Pilih tujuan dari daftar autocomplete.');
+  if(destination.error)throw Error(destination.error);
+
+  const people=slots.map(p=>{
+    if(p.role.startsWith('Driver')){
+      if(!p.selected)throw Error('Pilih '+p.role+' dari daftar driver.');
+      return {id:p.selected.id,role:p.role,rekening:p.account.value.trim()};
+    }
+
+    const nama=(p.manual.nama.value||'').trim();
+    if(!nama)throw Error('Nama '+p.role+' wajib diisi.');
+
+    return {
+      id:'manual:'+p.role,
+      role:p.role,
+      nama:nama,
+      nip:(p.manual.nip.value||'').trim(),
+      stts:(p.manual.stts.value||'').trim(),
+      pangkat:(p.manual.pangkat.value||'').trim(),
+      jabatan:(p.manual.jabatan.value||'').trim(),
+      rekening:(p.account.value||'').trim()
+    };
+  });
+
+  const keys=people.map(p=>{
+    if(p.role.startsWith('Driver')){
+      const src=slots.find(x=>x.role===p.role).selected;
+      const n=String(src.nip||'').replace(/[^0-9a-z]/gi,'');
+      return n&&!/^(na|nihil|null)$/i.test(n)?'nip:'+n:'nama:'+src.nama.trim().toLowerCase();
+    }
+    const n=String(p.nip||'').replace(/[^0-9a-z]/gi,'');
+    return n&&!/^(na|nihil|null)$/i.test(n)?'nip:'+n:'nama:'+p.nama.trim().toLowerCase();
+  });
+
   if(new Set(keys).size!==keys.length)throw Error('Nama petugas yang sama tidak boleh dipilih dua kali.');
-  return {requestId:requestId(),tujuanId:destination.id,bbmId:el('bbm').value,platId:el('plat').value,berangkat:el('berangkat').value,status:el('status').value,pasien:el('pasien').value.trim(),alamatPasien:el('alamat').value.trim(),people:slots.map(p=>({id:p.selected.id,role:p.role,rekening:p.account.value.trim()}))}
+
+  return {
+    requestId:requestId(),
+    tujuanId:destination.id,
+    bbmId:el('bbm').value,
+    platId:el('plat').value,
+    berangkat:el('berangkat').value,
+    status:el('status').value,
+    pasien:el('pasien').value.trim(),
+    alamatPasien:el('alamat').value.trim(),
+    people:people
+  };
 }
 
 el('form').onsubmit=e=>{e.preventDefault();if(busy||completed)return;try{if(!pending)pending=readForm();runGenerate(pending)}catch(err){showNotice('processStatus',err.message,'error')}};
 async function runGenerate(payload){
-  switchTab('input');busy=true;el('fields').disabled=true;el('submitBtn').disabled=true;el('newBtn').disabled=true;el('submitBtn').textContent='Membuat dokumen…';
-  showNotice('processStatus','Membuat SPT driver dan menyimpan URL ke rekap…');
+  switchTab('input');
+  busy=true;
+  el('fields').disabled=true;
+  el('submitBtn').disabled=true;
+  el('newBtn').disabled=true;
+  el('submitBtn').textContent='Memproses…';
+  showNotice('processStatus','');
+  showCreateLoading(true,'Membuat dokumen SPT driver…');
+
   try{
-    const t=await postGenerate(payload);busy=false;completed=true;pending=null;el('newBtn').disabled=false;el('submitBtn').textContent='Dokumen sudah dibuat';
-    showNotice('processStatus','Selesai. SPT driver sudah dibuat dan rekap sudah disimpan.','success');
-    const r=el('result');r.textContent='';r.appendChild(renderTrip(t,false));r.hidden=false;r.scrollIntoView({behavior:'smooth',block:'start'});loadHistory()
+    const t=await postGenerate(payload);
+
+    busy=false;
+    completed=true;
+    pending=null;
+    el('newBtn').disabled=false;
+    el('submitBtn').textContent='SPT berhasil dibuat';
+
+    showCreateLoading(true,'SPT selesai. Membuka Rekap…');
+
+    // Tidak berhenti di halaman form. Langsung buka menu Rekap & SPT.
+    await loadHistory(t.id);
+    switchTab('rekap');
+
+    setTimeout(()=>{
+      showCreateLoading(false);
+      const target=document.querySelector('[data-trip-id="'+CSS.escape(String(t.id||''))+'"]');
+      if(target){
+        target.open=true;
+        target.classList.add('created-flash');
+        target.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+      toast('SPT berhasil dibuat dan masuk ke Rekap');
+    },350);
+
   }catch(e){
-    busy=false;el('submitBtn').disabled=false;el('newBtn').disabled=false;el('submitBtn').textContent='Coba lagi / lanjutkan';
-    showNotice('processStatus',e.message+' Data formulir tetap dikunci untuk percobaan ulang.','error')
+    busy=false;
+    el('submitBtn').disabled=false;
+    el('newBtn').disabled=false;
+    el('submitBtn').textContent='Coba lagi / lanjutkan';
+    showCreateLoading(false);
+    showNotice('processStatus',e.message+' Data formulir tetap dikunci untuk percobaan ulang.','error');
   }
 }
 function newTrip(){
@@ -321,10 +570,42 @@ function renderTrip(t,compact){
   share.appendChild(node('div','Klik teks untuk menyalin. Di HP Anda juga bisa screenshot card ini langsung.','share-tip'));outer.appendChild(share);
   if(t.error)outer.appendChild(node('div',t.error,'notice error'));return outer
 }
-async function loadHistory(){
-  if(historyBusy)return;historyBusy=true;el('historyRefresh').disabled=true;el('historyStatus').textContent='Memuat…';
-  try{const data=await jsonp('getRecentTrips');el('history').textContent='';(data.rows||[]).forEach(t=>{const d=node('details');d.appendChild(node('summary',(t.berangkatText||'Tanpa tanggal')+' · '+t.tujuan+' · '+(t.people||[]).map(p=>p.nama).join(', ')));const b=node('div',undefined,'details-body');b.appendChild(renderTrip(t,true));d.appendChild(b);el('history').appendChild(d)});el('historyStatus').textContent=el('history').children.length?'':'Belum ada perjalanan.'}
-  catch(e){el('historyStatus').textContent='Gagal memuat: '+e.message}finally{historyBusy=false;el('historyRefresh').disabled=false}
+async function loadHistory(focusId){
+  if(historyBusy)return;
+  historyBusy=true;
+  el('historyRefresh').disabled=true;
+  el('historyStatus').textContent='Memuat rekap…';
+
+  try{
+    const data=await jsonp('getRecentTrips');
+    el('history').textContent='';
+
+    (data.rows||[]).forEach(t=>{
+      const d=node('details');
+      d.dataset.tripId=String(t.id||'');
+      if(focusId && String(t.id||'')===String(focusId)) d.open=true;
+
+      const names=(t.people||[]).map(p=>p.nama).join(', ');
+      const summary=node('summary');
+      const title=node('div');
+      title.appendChild(node('strong',t.tujuan||'Perjalanan'));
+      title.appendChild(node('div',(t.berangkatText||'Tanpa tanggal')+' · '+names,'muted'));
+      summary.appendChild(title);
+      d.appendChild(summary);
+
+      const b=node('div',undefined,'details-body');
+      b.appendChild(renderTrip(t,true));
+      d.appendChild(b);
+      el('history').appendChild(d);
+    });
+
+    el('historyStatus').textContent=el('history').children.length?'':'Belum ada perjalanan.';
+  }catch(e){
+    el('historyStatus').textContent='Gagal memuat: '+e.message;
+  }finally{
+    historyBusy=false;
+    el('historyRefresh').disabled=false;
+  }
 }
 
 if(apiReady())loadData();else{showNotice('loadStatus','Belum terhubung ke GAS. Isi konstanta GAS_URL di index.html lalu upload ke GitHub Pages.','error');el('reloadData').hidden=false}
