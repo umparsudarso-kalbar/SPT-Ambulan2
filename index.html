@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f6f68">
+  <title>SPT Ambulan RSDS</title>
+  <style>
+    :root{
+      --bg:#f3f7f7;--card:#fff;--ink:#17343a;--muted:#6a7f83;--line:#dce8e7;
+      --brand:#0f756c;--brand2:#164758;--soft:#e8f4f1;--danger:#a23d31;--warn:#875a21;
+      --shadow:0 8px 28px rgba(19,62,67,.07)
+    }
+    *{box-sizing:border-box}
+    html{font-size:16px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    button,input,select,textarea{font:inherit}
+    button,a{touch-action:manipulation}
+    header{background:linear-gradient(120deg,var(--brand2),var(--brand));color:#fff;padding:22px max(16px,calc((100vw - 1120px)/2))}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:18px}
+    h1{font-size:clamp(21px,3vw,29px);margin:0 0 5px}.head p{margin:0;color:#d4ece8;font-size:13px}.hospital{border:1px solid #ffffff42;border-radius:999px;padding:8px 12px;font-size:12px}
+    main{max-width:1120px;margin:auto;padding:18px 16px 56px}
+    .tabs{display:flex;gap:6px;background:#dfebe8;padding:5px;border-radius:13px;width:max-content;max-width:100%;margin-bottom:18px}
+    .tabs button{border:0;background:transparent;border-radius:9px;padding:10px 18px;font-weight:800;color:#476963;cursor:pointer}
+    .tabs button[aria-selected="true"]{background:#fff;color:var(--brand);box-shadow:0 2px 7px #25494112}
+    .intro{margin-bottom:16px}.intro h2{font-size:21px;margin:0 0 5px}.hint,.muted{color:var(--muted);font-size:12px;line-height:1.55}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:var(--shadow);margin-bottom:15px}
+    .card h3{margin:0;font-size:16px}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}
+    .step{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;background:var(--soft);color:var(--brand);font-size:12px;margin-right:8px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}
+    label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}
+    input,select,textarea{width:100%;border:1px solid #d2e0df;background:#fff;color:var(--ink);padding:11px 12px;border-radius:10px;min-height:44px}
+    textarea{min-height:86px;resize:vertical}input:focus,select:focus,textarea:focus{outline:3px solid #15998918;border-color:#47a79b}
+    button,.button{border:0;border-radius:10px;padding:11px 14px;font-weight:800;font-size:13px;cursor:pointer;background:#e8f0ef;color:#315f5a;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    button:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--brand);color:#fff}.danger{background:#fff0ed;color:var(--danger)}
+    .small{padding:8px 10px;font-size:12px}.info{padding:11px 12px;border-radius:10px;background:#f1f7f5;color:#456b64;font-size:12px;line-height:1.6}
+    .person{position:relative;border:1px solid #e0e9e7;border-radius:12px;padding:13px;margin-top:11px}.person-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:11px}
+    .person-meta{font-size:12px;line-height:1.6;background:#f7f9f9;border-radius:9px;padding:10px;margin:9px 0;overflow-wrap:anywhere}
+    .auto{position:relative}.auto:focus-within{z-index:20}.suggestions{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 12px 30px #153d4425;max-height:250px;overflow:auto;z-index:30}
+    .suggestions button{width:100%;display:block;text-align:left;background:#fff;border-radius:0;border-bottom:1px solid #edf3f1;font-weight:400}.suggestions strong{display:block;margin-bottom:3px}
+    .summary{position:sticky;top:14px}.money-line{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}.money-line strong{white-space:nowrap}
+    .total{border-top:2px solid #d6e4e1;margin-top:10px;padding-top:13px}.total strong{display:block;font-size:25px;color:var(--brand);margin-top:4px}.summary .primary{width:100%;margin-top:14px}
+    .notice{padding:11px 13px;border-radius:10px;background:#fff2df;color:var(--warn);margin-bottom:14px;line-height:1.55;font-size:13px}.notice.error{background:#fff0ed;color:var(--danger)}.notice.success{background:#e8f6ed;color:#286848}
+    [hidden]{display:none!important}.result-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.badge{font-size:11px;border-radius:999px;padding:5px 8px;background:#e8f4ee;color:#2d7257}
+    .report-destination{font-size:20px;font-weight:900;margin:4px 0 14px}.trip-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}.trip-meta>div{background:#f4f8f7;border-radius:10px;padding:10px}.trip-meta span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase}.trip-meta strong{display:block;margin-top:4px;font-size:13px}
+    .table-wrap{overflow:auto;margin:13px -4px}table{width:100%;border-collapse:collapse;font-size:12px;min-width:520px}th{background:#f1f7f5;color:#54766c;text-align:left;font-size:11px;padding:10px}td{padding:11px 10px;border-bottom:1px solid #e7efed;vertical-align:top}.amount{white-space:nowrap;text-align:right}
+    .report-label{margin-top:18px;font-size:11px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    details{border:1px solid var(--line);border-radius:12px;background:#fff;margin:10px 0;overflow:hidden}summary{cursor:pointer;padding:14px;font-size:13px;font-weight:800}.details-body{padding:0 14px 14px}
+    .share-card{margin-top:14px;border:1px dashed #bfd4d0;background:#f8fbfa;border-radius:14px;padding:14px}
+    .share-title{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#557672;margin-bottom:8px}
+    .share-text{white-space:pre-wrap;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#213b40;user-select:text;cursor:pointer;padding:12px;background:#fff;border-radius:10px;border:1px solid #e0e9e7}
+    .share-tip{font-size:11px;color:var(--muted);margin-top:7px}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#173b40;color:#fff;padding:10px 14px;border-radius:999px;font-size:12px;box-shadow:0 8px 24px #0002;z-index:99}
+    @media(max-width:860px){.layout{grid-template-columns:1fr}.summary{position:static}.summary .card{margin-bottom:15px}}
+    @media(max-width:600px){
+      header{padding:18px 15px}.hospital{display:none}main{padding:13px 11px 42px}.tabs{width:100%}.tabs button{flex:1;padding:10px 8px}
+      .card{padding:14px;border-radius:14px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.section-head{align-items:flex-start}.section-head button{flex:none}
+      .trip-meta{grid-template-columns:1fr 1fr}.trip-meta>div:last-child{grid-column:1/-1}.report-destination{font-size:18px}.total strong{font-size:23px}
+      .actions .button,.actions button{width:100%}.share-text{font-size:12px}.intro h2{font-size:19px}
+    }
+    @media(max-width:390px){main{padding-left:8px;padding-right:8px}.card{padding:12px}.trip-meta{grid-template-columns:1fr}.trip-meta>div:last-child{grid-column:auto}}
+  </style>
+</head>
+<body>
+<header><div class="head"><div><h1>🚑 SPT Ambulan RSDS</h1><p>SPT driver, rekap perjalanan & rincian transfer</p></div><div class="hospital">RSUD dr. Soedarso</div></div></header>
+<main>
+  <nav class="tabs">
+    <button id="inputTab" aria-selected="true" onclick="switchTab('input')">Buat SPT</button>
+    <button id="rekapTab" aria-selected="false" onclick="switchTab('rekap')">Rekap</button>
+  </nav>
+
+  <section id="inputPanel">
+    <div id="loadStatus" class="notice">Memuat data…</div>
+    <button id="reloadData" hidden onclick="loadData()">Muat ulang data</button>
+
+    <div class="intro">
+      <h2>Buat surat perjalanan</h2>
+      <div class="hint">Mekanisme sederhana: 1 SPT Google Docs per driver, tanpa membuat folder perjalanan dan tanpa membuat file PDF tambahan. Rekap tetap ditambahkan ke Rekap-baru.</div>
+    </div>
+
+    <form id="form">
+      <div class="layout">
+        <fieldset id="fields" disabled style="border:0;padding:0;margin:0;min-width:0">
+          <section class="card">
+            <div class="section-head"><h3><span class="step">01</span>Perjalanan & kendaraan</h3></div>
+            <div class="grid">
+              <div class="full"><label>Tujuan pengantaran</label><div class="auto"><input id="tujuan" required autocomplete="off" placeholder="Ketik nama tujuan…"><div id="tujuanList" class="suggestions" hidden></div></div></div>
+              <div><label>Tanggal berangkat</label><input id="berangkat" type="date" required></div>
+              <div><label>Kendaraan</label><select id="plat" required><option value="">Pilih plat mobil</option></select></div>
+              <div class="full info" id="travelInfo">Lama perjalanan dan tanggal kembali mengikuti tujuan.</div>
+              <div><label>Jenis BBM</label><select id="bbm" required><option value="">Pilih BBM</option></select></div>
+              <div><label>Kebutuhan BBM</label><div class="info" id="fuelInfo">Pilih tujuan dan jenis BBM.</div></div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><h3><span class="step">02</span>Pengemudi</h3><button type="button" class="small" id="addDriver" onclick="addPerson('Driver 2')" disabled>+ Driver kedua</button></div>
+            <div class="hint" id="driverHint">Driver kedua hanya tersedia untuk perjalanan tepat 3 hari.</div><div id="drivers"></div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><h3><span class="step">03</span>Perawat pendamping</h3><button type="button" class="small" id="addNurseBtn">+ Perawat</button></div>
+            <div class="hint">Opsional, maksimal 2 orang. Perawat tidak dibuatkan SPT.</div><div id="nurses"></div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><h3><span class="step">04</span>Pasien / jenazah</h3></div>
+            <div class="grid">
+              <div><label>Status pengantaran</label><select id="status"><option>Pasien</option><option>Jenazah</option></select></div>
+              <div><label>Nama pasien / jenazah</label><input id="pasien" required maxlength="200"></div>
+              <div class="full"><label>Alamat pasien / jenazah</label><textarea id="alamat" required maxlength="1000"></textarea></div>
+            </div>
+          </section>
+        </fieldset>
+
+        <aside class="summary">
+          <section class="card">
+            <h3>Rincian transfer</h3><div class="hint">BBM satu mobil + SPPD setiap petugas.</div>
+            <div id="costs"></div>
+            <div class="total"><span class="muted">TOTAL TRANSFER</span><strong id="total">—</strong></div>
+            <div class="hint" id="costNote">Pilih tujuan, BBM, dan petugas.</div>
+            <button id="submitBtn" class="primary" type="submit" disabled>Buat SPT</button>
+            <button id="newBtn" disabled type="button" class="small" style="width:100%;margin-top:8px" onclick="newTrip()">Formulir baru</button>
+          </section>
+          <div id="processStatus" class="notice" hidden></div>
+        </aside>
+      </div>
+    </form>
+    <div id="result" hidden></div>
+  </section>
+
+  <section id="rekapPanel" hidden>
+    <div class="section-head"><div><h2 style="font-size:20px;margin:0">Perjalanan terakhir</h2><div class="hint">Ringkasan perjalanan terakhir yang tersimpan.</div></div><button id="historyRefresh" onclick="loadHistory()">↻ Muat ulang</button></div>
+    <div id="historyStatus" class="hint"></div><div id="history"></div>
+  </section>
+</main>
+
+<iframe name="gasBridge" id="gasBridge" hidden></iframe>
+<form id="gasForm" method="post" target="gasBridge" hidden>
+  <input name="action" value="generateSPT">
+  <input name="payload" id="gasPayload">
+  <input name="token" id="gasToken">
+</form>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+'use strict';
+
+/* WAJIB: ganti dengan URL deployment Web App GAS (/exec), bukan URL editor. */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbytPTdXyOsDGNh3coAXHz189fH0eJoYUkaDE-ytoSZsHfKVy3EVqvkPXwsT2JmDIrheDA/exec';
+
+let DATA={drivers:[],nurses:[],tujuan:[],bbm:[],plat:[]}, destination=null, slots=[], pending=null, busy=false, completed=false, historyBusy=false;
+const el=id=>document.getElementById(id);
+const node=(tag,txt,cls)=>{const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n};
+const money=n=>Number.isFinite(n)?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n):'—';
+
+function toast(msg){const t=el('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.hidden=true,1800)}
+function showNotice(id,text,type){const n=el(id);n.textContent=text;n.className='notice'+(type?' '+type:'');n.hidden=!text}
+function apiReady(){return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec/.test(GAS_URL)}
+function switchTab(tab){const r=tab==='rekap';el('inputPanel').hidden=r;el('rekapPanel').hidden=!r;el('inputTab').setAttribute('aria-selected',String(!r));el('rekapTab').setAttribute('aria-selected',String(r));if(r&&!historyBusy)loadHistory()}
+
+function jsonp(action){
+  return new Promise((resolve,reject)=>{
+    if(!apiReady()) return reject(Error('Isi GAS_URL di index.html dengan URL deployment GAS /exec.'));
+    const cb='__sptcb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const s=document.createElement('script');
+    const timer=setTimeout(()=>done(Error('Server tidak merespons.')),30000);
+    function done(err,val){clearTimeout(timer);delete window[cb];s.remove();err?reject(err):resolve(val)}
+    window[cb]=res=>res&&res.ok?done(null,res.data):done(Error((res&&res.error)||'Gagal mengambil data.'));
+    s.onerror=()=>done(Error('Gagal terhubung ke server GAS.'));
+    s.src=GAS_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+    document.head.appendChild(s);
+  });
+}
+
+const postWaiters=new Map();
+window.addEventListener('message',e=>{
+  const d=e.data;if(!d||!d.token||!postWaiters.has(d.token))return;
+  const w=postWaiters.get(d.token);postWaiters.delete(d.token);clearTimeout(w.timer);
+  d.ok?w.resolve(d.data):w.reject(Error(d.error||'Gagal membuat SPT.'));
+});
+
+function postGenerate(payload){
+  return new Promise((resolve,reject)=>{
+    if(!apiReady()) return reject(Error('Isi GAS_URL di index.html dengan URL deployment GAS /exec.'));
+    const token='t_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const timer=setTimeout(()=>{postWaiters.delete(token);reject(Error('Proses terlalu lama. Coba lagi dengan data yang sama.'))},90000);
+    postWaiters.set(token,{resolve,reject,timer});
+    el('gasForm').action=GAS_URL;el('gasPayload').value=JSON.stringify(payload);el('gasToken').value=token;el('gasForm').submit();
+  });
+}
+
+function fillSelect(id,items,label,placeholder){const s=el(id);s.textContent='';const f=node('option',placeholder);f.value='';s.appendChild(f);items.forEach(x=>{const o=node('option',label(x));o.value=x.id;s.appendChild(o)})}
+
+async function loadData(){
+  el('reloadData').hidden=true;showNotice('loadStatus','Memuat data tujuan, petugas, kendaraan, dan BBM…');
+  try{
+    DATA=await jsonp('getAppData');el('berangkat').value=DATA.today;
+    fillSelect('plat',DATA.plat,p=>p.plat+(p.mobil?' · '+p.mobil:''),'Pilih plat mobil');
+    fillSelect('bbm',DATA.bbm,b=>b.jenis+' · '+money(b.harga)+'/liter','Pilih BBM');
+    el('fields').disabled=false;el('submitBtn').disabled=false;el('newBtn').disabled=false;showNotice('loadStatus','');
+    if(!slots.length)addPerson('Driver 1');updateCosts();
+  }catch(e){showNotice('loadStatus',e.message,'error');el('reloadData').hidden=false}
+}
+
+function autocomplete(input,list,items,label,detail,onSelect,onClear){
+  function show(){
+    const q=input.value.toLowerCase().trim();list.textContent='';
+    const found=items().filter(x=>(label(x)+' '+detail(x)).toLowerCase().includes(q)).slice(0,35);
+    found.forEach(item=>{const b=node('button');b.type='button';b.append(node('strong',label(item)),node('span',detail(item)));b.onclick=()=>{input.value=label(item);list.hidden=true;onSelect(item)};list.appendChild(b)});
+    if(!found.length)list.appendChild(node('div','Tidak ditemukan.','hint'));list.hidden=false
+  }
+  input.addEventListener('input',()=>{onClear();show()});input.addEventListener('focus',show);
+}
+document.addEventListener('click',e=>document.querySelectorAll('.auto').forEach(a=>{if(!a.contains(e.target))a.querySelector('.suggestions').hidden=true}));
+
+function syncDestination(){
+  if(!destination||destination.lama!==3)slots.filter(p=>p.role==='Driver 2').forEach(p=>removePerson(p,false));
+  el('addDriver').disabled=!destination||destination.lama!==3||slots.some(p=>p.role==='Driver 2');
+  el('driverHint').textContent=destination&&destination.lama===3?'Perjalanan 3 hari: boleh menambah 1 driver.':'Driver kedua hanya tersedia untuk perjalanan tepat 3 hari.';
+  updateCosts()
+}
+
+function addPerson(role){
+  if(role==='Driver 2'&&(!destination||destination.lama!==3||slots.some(p=>p.role===role)))return;
+  if(slots.some(p=>p.role===role))return;
+  const key='p'+Date.now()+Math.random().toString(36).slice(2),p={role,selected:null,key};slots.push(p);
+  const box=node('div',undefined,'person');p.box=box;const head=node('div',undefined,'person-title');p.title=node('strong',role);head.appendChild(p.title);
+  if(role!=='Driver 1'){const rm=node('button','Hapus','small danger');rm.type='button';rm.onclick=()=>removePerson(p,true);head.appendChild(rm)}box.appendChild(head);
+  const lab=node('label','Nama petugas');lab.htmlFor=key;box.appendChild(lab);
+  const wrap=node('div',undefined,'auto'),inp=node('input');inp.id=key;inp.required=true;inp.autocomplete='off';inp.placeholder=role.startsWith('Driver')?'Ketik nama driver / NIP…':'Ketik nama perawat / NIP/NIK…';
+  const list=node('div',undefined,'suggestions');list.hidden=true;wrap.append(inp,list);box.appendChild(wrap);
+  p.meta=node('div','Pilih nama dari daftar agar identitas terisi.','person-meta');box.appendChild(p.meta);
+  const rl=node('label','No rekening (opsional)');box.appendChild(rl);p.account=node('input');p.account.maxLength=100;p.account.placeholder='Boleh dikosongkan';box.appendChild(p.account);
+  function pick(x){p.selected=x;inp.value=x.nama;p.account.value=x.rekening||'';p.meta.textContent='NIP/NIK: '+(x.nip||'—')+' | STTS: '+(x.stts||'—')+' | Pangkat: '+(x.pangkat||'—')+' | Jabatan: '+(x.jabatan||'—');updateCosts()}
+  function clear(){p.selected=null;p.account.value='';p.meta.textContent='Pilih nama dari daftar agar identitas terisi.';updateCosts()}
+  autocomplete(inp,list,()=>role.startsWith('Driver')?DATA.drivers:DATA.nurses,x=>x.nama,x=>(x.nip||'Tanpa NIP/NIK')+' · '+x.jabatan,pick,clear);
+  el(role.startsWith('Driver')?'drivers':'nurses').appendChild(box);syncButtons();updateCosts()
+}
+function addNurse(){const c=slots.filter(p=>p.role.startsWith('Perawat')).length;if(c<2)addPerson('Perawat '+(c+1))}
+el('addNurseBtn').onclick=addNurse;
+function removePerson(p,up){p.box.remove();slots=slots.filter(x=>x!==p);slots.filter(x=>x.role.startsWith('Perawat')).forEach((x,i)=>{x.role='Perawat '+(i+1);x.title.textContent=x.role});syncButtons();if(up)updateCosts()}
+function syncButtons(){el('addNurseBtn').disabled=slots.filter(p=>p.role.startsWith('Perawat')).length>=2;el('addDriver').disabled=!destination||destination.lama!==3||slots.some(p=>p.role==='Driver 2')}
+function returnLabel(){if(!destination||!el('berangkat').value)return'—';const d=new Date(el('berangkat').value+'T12:00:00');d.setDate(d.getDate()+destination.lama-1);return d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}
+function costLine(c,l,v){const d=node('div',undefined,'money-line');d.append(node('span',l),node('strong',money(v)));c.appendChild(d)}
+function updateCosts(){
+  const fuel=DATA.bbm.find(x=>x.id===el('bbm').value),valid=destination&&!destination.error&&fuel&&!fuel.error;
+  el('travelInfo').textContent=destination?destination.lama+' hari · Kembali '+returnLabel():'Lama perjalanan dan tanggal kembali mengikuti tujuan.';
+  const fc=valid?Math.round(destination.liter*fuel.harga):null;el('fuelInfo').textContent=destination&&fuel?destination.liter+' liter × '+money(fuel.harga)+' = '+money(fc):'Pilih tujuan dan jenis BBM.';
+  el('costs').textContent='';costLine(el('costs'),'Biaya BBM',fc);slots.forEach(p=>costLine(el('costs'),p.role+(p.selected?' · '+p.selected.nama:''),destination?destination.sppd:null));
+  el('total').textContent=valid?money(fc+slots.length*destination.sppd):'—';el('costNote').textContent=destination&&destination.error?destination.error:fuel&&fuel.error?fuel.error:'SPPD per orang untuk seluruh perjalanan. Rekening boleh kosong.'
+}
+el('berangkat').onchange=updateCosts;el('bbm').onchange=updateCosts;
+
+autocomplete(el('tujuan'),el('tujuanList'),()=>DATA.tujuan,x=>x.nama,x=>x.lama+' hari · '+(x.liter===null?'Liter belum diisi':x.liter+' liter'),x=>{destination=x;syncDestination()},()=>{destination=null;syncDestination()});
+
+function requestId(){return crypto.randomUUID?crypto.randomUUID():'spt_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
+function readForm(){
+  if(!destination)throw Error('Pilih tujuan dari daftar autocomplete.');if(destination.error)throw Error(destination.error);
+  if(slots.some(p=>!p.selected))throw Error('Pilih setiap nama petugas dari daftar autocomplete atau hapus petugas tambahan.');
+  const keys=slots.map(p=>{const n=String(p.selected.nip||'').replace(/[^0-9a-z]/gi,'');return n&&!/^(na|nihil|null)$/i.test(n)?'nip:'+n:'nama:'+p.selected.nama.trim().toLowerCase()});
+  if(new Set(keys).size!==keys.length)throw Error('Nama petugas yang sama tidak boleh dipilih dua kali.');
+  return {requestId:requestId(),tujuanId:destination.id,bbmId:el('bbm').value,platId:el('plat').value,berangkat:el('berangkat').value,status:el('status').value,pasien:el('pasien').value.trim(),alamatPasien:el('alamat').value.trim(),people:slots.map(p=>({id:p.selected.id,role:p.role,rekening:p.account.value.trim()}))}
+}
+
+el('form').onsubmit=e=>{e.preventDefault();if(busy||completed)return;try{if(!pending)pending=readForm();runGenerate(pending)}catch(err){showNotice('processStatus',err.message,'error')}};
+async function runGenerate(payload){
+  switchTab('input');busy=true;el('fields').disabled=true;el('submitBtn').disabled=true;el('newBtn').disabled=true;el('submitBtn').textContent='Membuat dokumen…';
+  showNotice('processStatus','Sedang membuat SPT driver dan menyimpan rekap…');
+  try{
+    const t=await postGenerate(payload);busy=false;completed=true;pending=null;el('newBtn').disabled=false;el('submitBtn').textContent='Dokumen sudah dibuat';
+    showNotice('processStatus','Selesai. SPT driver sudah dibuat dan rekap sudah disimpan.','success');
+    const r=el('result');r.textContent='';r.appendChild(renderTrip(t,false));r.hidden=false;r.scrollIntoView({behavior:'smooth',block:'start'});loadHistory()
+  }catch(e){
+    busy=false;el('submitBtn').disabled=false;el('newBtn').disabled=false;el('submitBtn').textContent='Coba lagi / lanjutkan';
+    showNotice('processStatus',e.message+' Data formulir tetap dikunci untuk percobaan ulang.','error')
+  }
+}
+function newTrip(){
+  if(busy)return;el('form').reset();slots.forEach(p=>p.box.remove());slots=[];destination=null;pending=null;completed=false;el('fields').disabled=false;el('submitBtn').disabled=false;el('submitBtn').textContent='Buat SPT';el('berangkat').value=DATA.today||'';addPerson('Driver 1');showNotice('processStatus','');el('result').hidden=true;updateCosts();el('tujuan').focus()
+}
+function safeLink(url,label,cls){
+  const a=node('a',label,'button '+(cls||''));
+  if(/^https:\/\/(docs\.google\.com)\//.test(url||'')){
+    a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+  }
+  return a
+}
+function simpleReport(t){
+  const lines=['LAPORAN SPT AMBULAN','Tujuan: '+t.tujuan,'Tanggal: '+t.berangkatText+' s/d '+t.kembaliText,'Kendaraan: '+t.plat,''];
+  (t.people||[]).forEach(p=>lines.push(p.role+': '+p.nama+' | Rek: '+(p.rekening||'-')+' | SPPD: '+money(p.sppd)));
+  lines.push('','BBM: '+t.liter+' L '+t.bbm+' = '+money(t.bbmTotal),'TOTAL TRANSFER: '+money(t.total));
+  return lines.join('\n')
+}
+function renderTrip(t,compact){
+  const outer=node(compact?'div':'section',undefined,(compact?'':'card ')+'report-card');
+  const head=node('div',undefined,'result-title');head.append(node('h3','Laporan Perjalanan Ambulan'),node('span',t.state,'badge'));outer.appendChild(head);
+  outer.appendChild(node('div',t.tujuan,'report-destination'));
+  const meta=node('div',undefined,'trip-meta');[['Berangkat',t.berangkatText],['Kembali',t.kembaliText],['Kendaraan',t.plat]].forEach(p=>{const d=node('div');d.append(node('span',p[0]),node('strong',p[1]||'—'));meta.appendChild(d)});outer.appendChild(meta);
+  if(t.pasien)outer.appendChild(node('div',(t.status||'Pasien')+': '+t.pasien+(t.alamatPasien?' · '+t.alamatPasien:''),'hint'));
+  const tw=node('div',undefined,'table-wrap'),table=node('table');table.innerHTML='<thead><tr><th>Petugas</th><th>No. Rekening</th><th style="text-align:right">SPPD</th></tr></thead>';const tb=node('tbody');
+  (t.people||[]).forEach(p=>{const tr=node('tr'),td=node('td');td.append(node('strong',p.role+' · '+p.nama),node('div',p.jabatan||'','muted'));tr.append(td,node('td',p.rekening||'-'),node('td',money(p.sppd),'amount'));tb.appendChild(tr)});table.appendChild(tb);tw.appendChild(table);outer.appendChild(tw);
+  outer.appendChild(node('div','Rincian dana','report-label'));costLine(outer,'BBM '+t.bbm+' · '+t.liter+' liter × '+money(t.harga),t.bbmTotal);costLine(outer,'Total SPPD ('+(t.people||[]).length+' petugas)',t.sppdTotal);
+  const total=node('div',undefined,'total');total.append(node('span','TOTAL YANG HARUS DITRANSFER'),node('strong',money(t.total)));outer.appendChild(total);
+  const actions=node('div',undefined,'actions');
+  (t.people||[]).filter(p=>String(p.role||'').startsWith('Driver')&&p.docUrl).forEach(p=>{
+    actions.appendChild(safeLink(p.docUrl,'Lihat '+p.role,'primary'));
+    if(p.pdfUrl)actions.appendChild(safeLink(p.pdfUrl,'Download PDF '+p.role,''));
+  });
+  if(t.rekapUrl)actions.appendChild(safeLink(t.rekapUrl,'Buka Rekap',''));
+  if(t.state!=='SELESAI'){
+    const b=node('button','Coba lagi / lanjutkan','small primary');
+    b.onclick=()=>{pending={requestId:t.id};completed=false;runGenerate(pending)};
+    actions.appendChild(b)
+  }
+  outer.appendChild(actions);
+
+  const share=node('div',undefined,'share-card');share.appendChild(node('div','Ringkasan siap WhatsApp / screenshot','share-title'));
+  const txt=node('div',simpleReport(t),'share-text');txt.title='Klik untuk menyalin teks';txt.onclick=async()=>{try{await navigator.clipboard.writeText(txt.textContent);toast('Ringkasan disalin')}catch(_){const r=document.createRange();r.selectNodeContents(txt);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Teks dipilih — salin manual')}};share.appendChild(txt);
+  share.appendChild(node('div','Klik teks untuk menyalin. Di HP Anda juga bisa screenshot card ini langsung.','share-tip'));outer.appendChild(share);
+  if(t.error)outer.appendChild(node('div',t.error,'notice error'));return outer
+}
+async function loadHistory(){
+  if(historyBusy)return;historyBusy=true;el('historyRefresh').disabled=true;el('historyStatus').textContent='Memuat…';
+  try{const data=await jsonp('getRecentTrips');el('history').textContent='';(data.rows||[]).forEach(t=>{const d=node('details');d.appendChild(node('summary',(t.berangkatText||'Tanpa tanggal')+' · '+t.tujuan+' · '+(t.people||[]).map(p=>p.nama).join(', ')));const b=node('div',undefined,'details-body');b.appendChild(renderTrip(t,true));d.appendChild(b);el('history').appendChild(d)});el('historyStatus').textContent=el('history').children.length?'':'Belum ada perjalanan.'}
+  catch(e){el('historyStatus').textContent='Gagal memuat: '+e.message}finally{historyBusy=false;el('historyRefresh').disabled=false}
+}
+
+if(apiReady())loadData();else{showNotice('loadStatus','Belum terhubung ke GAS. Isi konstanta GAS_URL di index.html lalu upload ke GitHub Pages.','error');el('reloadData').hidden=false}
+</script>
+</body>
+</html>
