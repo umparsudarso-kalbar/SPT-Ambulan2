@@ -77,7 +77,7 @@
 
     <div class="intro">
       <h2>Buat surat perjalanan</h2>
-      <div class="hint">Mekanisme sederhana: 1 SPT Google Docs per driver, tanpa membuat folder perjalanan dan tanpa membuat file PDF tambahan. Rekap tetap ditambahkan ke Rekap-baru.</div>
+      <div class="hint">Mekanisme cepat: 1 Google Docs SPT per driver. URL SPT otomatis disimpan di kolom W (Url SPT) pada Rekap-baru dan dapat diklik per nama.</div>
     </div>
 
     <form id="form">
@@ -268,7 +268,7 @@ function readForm(){
 el('form').onsubmit=e=>{e.preventDefault();if(busy||completed)return;try{if(!pending)pending=readForm();runGenerate(pending)}catch(err){showNotice('processStatus',err.message,'error')}};
 async function runGenerate(payload){
   switchTab('input');busy=true;el('fields').disabled=true;el('submitBtn').disabled=true;el('newBtn').disabled=true;el('submitBtn').textContent='Membuat dokumen…';
-  showNotice('processStatus','Sedang membuat SPT driver dan menyimpan rekap…');
+  showNotice('processStatus','Membuat SPT driver dan menyimpan URL ke rekap…');
   try{
     const t=await postGenerate(payload);busy=false;completed=true;pending=null;el('newBtn').disabled=false;el('submitBtn').textContent='Dokumen sudah dibuat';
     showNotice('processStatus','Selesai. SPT driver sudah dibuat dan rekap sudah disimpan.','success');
@@ -306,8 +306,7 @@ function renderTrip(t,compact){
   const total=node('div',undefined,'total');total.append(node('span','TOTAL YANG HARUS DITRANSFER'),node('strong',money(t.total)));outer.appendChild(total);
   const actions=node('div',undefined,'actions');
   (t.people||[]).filter(p=>String(p.role||'').startsWith('Driver')&&p.docUrl).forEach(p=>{
-    actions.appendChild(safeLink(p.docUrl,'Lihat '+p.role,'primary'));
-    if(p.pdfUrl)actions.appendChild(safeLink(p.pdfUrl,'Download PDF '+p.role,''));
+    actions.appendChild(safeLink(p.docUrl,'Buka SPT '+p.role,'primary'));
   });
   if(t.rekapUrl)actions.appendChild(safeLink(t.rekapUrl,'Buka Rekap',''));
   if(t.state!=='SELESAI'){
